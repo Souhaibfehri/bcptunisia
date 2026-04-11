@@ -1,0 +1,291 @@
+{
+  "nav": {
+    "ariaMain": "Navigation principale",
+    "ctaQuote": "Demander un devis",
+    "items": {
+      "home": "Accueil",
+      "company": "Entreprise",
+      "services": "Expertises",
+      "references": "Références",
+      "projects": "Réalisations",
+      "industries": "Secteurs d’activité",
+      "maintenance": "Maintenance & SAV",
+      "contact": "Contact",
+      "faq": "FAQ",
+      "news": "Actualités"
+    },
+    "groups": {
+      "projectsRefs": "Projets & Références",
+      "support": "Support"
+    },
+    "divisions": {
+      "label": "Expertises",
+      "pillars": {
+        "fire-safety": { "title": "Sécurité incendie" },
+        "electronic-security": { "title": "Sécurité électronique" },
+        "industrial-fluids": { "title": "Fluides industrie & tertiaire" },
+        "industrial-electrical": { "title": "Électricité industrie & tertiaire" },
+        "engineering-services": { "title": "Ingénierie & services" }
+      }
+    }
+  },
+  "footer": {
+    "brand": "BCP Tunisia — BE CLOSE PROTECTION",
+    "tagline": "De l’étude à la maintenance, nous sécurisons, équipons et accompagnons vos environnements industriels et tertiaires.",
+    "verifyRefs": "Vérifier l’orthographe officielle des noms de références et les droits d’usage avant publication définitive.",
+    "colExplore": "Explorer",
+    "colServices": "Expertises",
+    "ctaTitle": "Un projet technique ?",
+    "ctaBody": "Expliquez votre besoin : nos équipes vous recontactent pour cadrer la suite.",
+    "ctaButton": "Écrire à BCP Tunisia",
+    "legal": "Siège et coordonnées : à compléter avant mise en ligne.",
+    "rights": "Tous droits réservés."
+  },
+  "stickyCta": {
+    "quote": "Devis",
+    "expert": "Expert"
+  },
+  "forms": {
+    "name": "Nom & prénom",
+    "company": "Société",
+    "phone": "Téléphone",
+    "email": "E-mail",
+    "sector": "Secteur",
+    "needType": "Type de besoin",
+    "serviceCategory": "Catégorie de service",
+    "message": "Message",
+    "choose": "Sélectionner…",
+    "submit": "Envoyer",
+    "sending": "Envoi…",
+    "success": "Merci. Votre demande a été transmise.",
+    "error": "Envoi impossible pour le moment. Réessayez ou contactez-nous par téléphone.",
+    "validation": {
+      "required": "Champ requis",
+      "email": "E-mail invalide"
+    },
+    "honeypot": "Ne pas remplir",
+    "needTypes": {
+      "quote": "Demande de devis",
+      "expert": "Parler à un expert",
+      "maintenance": "Demande de maintenance / SAV",
+      "audit": "Visite / audit de site",
+      "other": "Autre"
+    },
+    "serviceCategories": {
+      "fire": "Sécurité incendie",
+      "security": "Sécurité électronique",
+      "fluids": "Fluides",
+      "electrical": "Électricité",
+      "engineering": "Ingénierie & services",
+      "maintenance": "Maintenance / SAV",
+      "other": "Autre"
+    },
+    "sectors": {
+      "industry": "Industrie",
+      "tertiary": "Tertiaire",
+      "health": "Santé",
+      "retail": "Retail / grandes surfaces",
+      "logistics": "Logistique",
+      "public": "Infrastructure / services",
+      "other": "Autre"
+    }
+  },
+  "home": {
+    "metaTitle": "BCP Tunisia — Ingénierie, installation et maintenance technique",
+    "metaDescription": "Partenaire technique en Tunisie pour sécurité incendie, sécurité électronique, fluides, électricité et ingénierie. Étude, installation, mise en service et maintenance.",
+    "hero": {
+      "kicker": "BE CLOSE PROTECTION",
+      "title": "Ingénierie et exécution technique pour environnements industriels et tertiaires.",
+      "subtitle": "De l’étude et la conception à l’installation, la mise en service et la maintenance, BCP Tunisia sécurise, équipe et accompagne vos sites avec une exigence de fiabilité et de tenue dans le temps.",
+      "ctaQuote": "Demander un devis",
+      "ctaExpert": "Parler à un expert",
+      "ctaBrochure": "Demander la documentation",
+      "heroFormTitle": "Prise de contact express"
+    },
+    "trust": {
+      "title": "Une chaîne de valeur complète",
+      "study": "Étude",
+      "install": "Installation",
+      "commission": "Mise en service",
+      "maintain": "Maintenance",
+      "support": "Support technique"
+    },
+    "divisions": {
+      "title": "Cinq expertises complémentaires",
+      "subtitle": "Des équipes terrain et bureau pour des projets cohérents, documentés et maintenables.",
+      "cta": "Découvrir"
+    },
+    "about": {
+      "title": "BCP Tunisia en bref",
+      "body": "Nous intervenons aux côtés des industriels, exploitants tertiaires et gestionnaires d’actifs qui ont besoin d’un partenaire capable d’assembler sécurité, fluides, électricité et ingénierie sans fragmenter la responsabilité. Notre approche est pragmatique : des solutions proportionnées au risque, une exécution contrôlée, et un suivi qui préserve la disponibilité de vos équipements.",
+      "link": "Lire la page Entreprise"
+    },
+    "sectors": {
+      "title": "Secteurs servis",
+      "subtitle": "Des contextes variés, une même exigence de qualité d’exécution.",
+      "industry": "Industrie & production",
+      "tertiary": "Tertiaire & bureaux",
+      "retail": "Retail & grandes surfaces",
+      "health": "Santé & hôtellerie",
+      "logistics": "Logistique & entrepôts",
+      "infra": "Infrastructures & sites sensibles"
+    },
+    "method": {
+      "title": "Méthode projet",
+      "subtitle": "Un cadre clair, de l’expression du besoin au suivi après livraison.",
+      "steps": {
+        "audit": { "title": "Audit & besoin", "body": "Compréhension du site, des risques et des interfaces avec l’exploitation." },
+        "design": { "title": "Étude & conception", "body": "Choix techniques, plans, dimensionnement et cahier des charges." },
+        "install": { "title": "Installation", "body": "Réalisation, coordination chantier et contrôle de qualité." },
+        "commission": { "title": "Mise en service", "body": "Essais, recette, documentation et transfert vers vos équipes." },
+        "maintain": { "title": "Maintenance & suivi", "body": "Plans d’entretien, interventions et assistance continue." }
+      }
+    },
+    "references": {
+      "title": "Références",
+      "subtitle": "Organisations qui nous confient des environnements exigeants — détail des projets sur demande.",
+      "cta": "Voir toutes les références",
+      "marqueeAria": "Défilé des logos de nos références clients"
+    },
+    "why": {
+      "title": "Pourquoi BCP Tunisia",
+      "items": {
+        "one": { "title": "Métier terrain", "body": "Des équipes habituées aux contraintes d’exploitation réelles, pas seulement aux livrables papier." },
+        "two": { "title": "Ingénierie & exécution", "body": "Une continuité entre étude, installation et maintenance pour limiter les ruptures de responsabilité." },
+        "three": { "title": "Sûreté & conformité", "body": "Des systèmes pensés pour être testés, entretenus et compris par vos opérateurs." },
+        "four": { "title": "Accompagnement long terme", "body": "Des contrats de maintenance et un support pour sécuriser la disponibilité après la recette." }
+      }
+    },
+    "finalCta": {
+      "title": "Prêt à structurer votre prochain chantier ?",
+      "body": "Expliquez votre contexte : secteur, type de site, urgence et périmètre attendu. Nous revenons vers vous pour qualifier la demande.",
+      "primary": "Demander un devis",
+      "secondary": "Demander une visite / audit"
+    }
+  },
+  "company": {
+    "metaTitle": "Entreprise | BCP Tunisia",
+    "metaDescription": "Positionnement, méthode et engagement de BCP Tunisia comme partenaire technique pour sites industriels et tertiaires.",
+    "h1": "L’entreprise",
+    "lead": "BCP Tunisia (BE CLOSE PROTECTION) est un partenaire technique pour les environnements industriels et tertiaires qui exigent fiabilité, sécurité et tenue dans le temps.",
+    "body1": "Nous structurons nos interventions autour d’une chaîne complète : compréhension du besoin, conception, installation, mise en service et maintenance. Cette continuité réduit les zones grises entre études et exploitation, et clarifie la responsabilité sur la durée.",
+    "body2": "Notre ton est volontairement sobre : pas de promesses chiffrées non vérifiées, pas de certifications affichées sans validation formelle. Nous privilégions des livrables exploitables — dossiers techniques, procédures, plans de maintenance — qui servent vos équipes au quotidien.",
+    "valuesTitle": "Ce qui guide notre travail",
+    "values": {
+      "safety": "Sécurité des personnes et des biens, sans compromis sur la lisibilité des systèmes.",
+      "quality": "Qualité d’exécution et contrôle sur site, alignés sur les règles de l’art.",
+      "continuity": "Disponibilité et maintenance pour prolonger la performance après la recette.",
+      "clarity": "Transparence sur périmètre, interfaces et responsabilités entre parties."
+    },
+    "mediaHeading": "Terrain & ingénierie",
+    "mediaBody": "Nos équipes interviennent sur des sites en activité, avec les contraintes de production, d’accès et de sécurité que cela implique.",
+    "mediaAlt": "Installation industrielle — illustration"
+  },
+  "servicesIndex": {
+    "metaTitle": "Expertises | BCP Tunisia",
+    "metaDescription": "Vue d’ensemble des cinq piliers : incendie, sécurité électronique, fluides, électricité, ingénierie & services.",
+    "h1": "Expertises",
+    "lead": "Cinq domaines complémentaires pour couvrir les systèmes critiques de vos bâtiments et processus.",
+    "ctaPillar": "Voir le pôle",
+    "ctaContact": "Parler à un ingénieur"
+  },
+  "referencesPage": {
+    "metaTitle": "Références | BCP Tunisia",
+    "metaDescription": "Organisations ayant fait appel à BCP Tunisia — détail des missions communiqué sur demande.",
+    "h1": "Références clients",
+    "lead": "La confiance se construit sur la durée. Voici des organisations pour lesquelles nous intervenons ou avons intervenu — sans détail de projet inventé.",
+    "note": "Vérifier l’orthographe officielle des dénominations et les accords de communication avant publication finale.",
+    "marqueeAria": "Logos des références clients"
+  },
+  "projectsPage": {
+    "metaTitle": "Réalisations | BCP Tunisia",
+    "metaDescription": "Approche projet et types de livrables — études de cas détaillées communiquées lorsque validées.",
+    "h1": "Réalisations",
+    "lead": "Nous documentons nos interventions pour nos clients ; les études de cas publiques sont partagées uniquement après validation formelle. Contactez-nous pour un dossier adapté à votre secteur.",
+    "placeholder": "Espace réservé à des fiches projets validées — contenu à compléter avec vos références approuvées."
+  },
+  "industriesPage": {
+    "metaTitle": "Secteurs | BCP Tunisia",
+    "metaDescription": "Industrie, tertiaire, santé, retail, logistique : BCP Tunisia adapte méthodes et équipes à chaque contexte.",
+    "h1": "Secteurs d’activité",
+    "lead": "Les contraintes changent selon le secteur ; notre méthode reste la même : cadrage, conception proportionnée, exécution contrôlée et suivi.",
+    "visualHeading": "Des contextes variés, une même exigence",
+    "visualBody": "Usines, sièges, entrepôts ou établissements sensibles : nous adaptons les équipes et les livrables au niveau de criticité réel du site.",
+    "visualAlt": "Site industriel et logistique — illustration",
+    "cards": {
+      "industry": { "title": "Industrie & production", "body": "Continuité de production, ATEX, utilités et sécurité incendie intégrées aux process." },
+      "tertiary": { "title": "Tertiaire & bureaux", "body": "SSI, accès, confort CVC et installations électriques pour sites à forte occupation." },
+      "retail": { "title": "Retail & grandes surfaces", "body": "Flux clients, files d’attente, vidéoprotection et maintenance multi-sites." },
+      "health": { "title": "Santé & hôtellerie", "body": "Disponibilité, appel infirmier, sécurité incendie et fluides sanitaires." },
+      "logistics": { "title": "Logistique", "body": "Sprinklers, détection, vidéo et électricité pour entrepôts et hubs." },
+      "infra": { "title": "Infrastructures", "body": "Systèmes techniques critiques et supervision pour sites sensibles." }
+    }
+  },
+  "maintenancePage": {
+    "metaTitle": "Maintenance & SAV | BCP Tunisia",
+    "metaDescription": "Contrats de maintenance, interventions correctives et assistance pour installations incendie, sécurité, fluides et électricité.",
+    "h1": "Maintenance & après-vente",
+    "lead": "La disponibilité se joue après la recette. Nous structurons des plans d’entretien et des interventions correctives adaptés à la criticité de vos équipements.",
+    "visualHeading": "Après la mise en service",
+    "visualBody": "Un système bien documenté et entretenu conserve son niveau de performance et simplifie les audits.",
+    "visualAlt": "Technicien en contrôle d’installations — illustration",
+    "blocks": {
+      "preventive": { "title": "Maintenance préventive", "body": "Périodicités, contrôles réglementaires et relevés pour anticiper les dérives." },
+      "corrective": { "title": "Maintenance corrective", "body": "Diagnostic, pièces et remise en service avec compte rendu exploitable." },
+      "contract": { "title": "Contrats & SLA", "body": "Périmètres clairs, temps d’intervention et escalade selon vos exigences." }
+    },
+    "cta": "Demander un plan de maintenance"
+  },
+  "contactPage": {
+    "metaTitle": "Contact & devis | BCP Tunisia",
+    "metaDescription": "Contactez BCP Tunisia pour un devis, une visite technique ou une demande de maintenance.",
+    "h1": "Contact & demande de devis",
+    "lead": "Décrivez votre besoin : nous revenons vers vous pour qualifier la demande et proposer la suite (visite, étude sommaire, proposition technique).",
+    "asideTitle": "Coordonnées",
+    "asideBody": "Téléphone, e-mail et adresse : à compléter avant publication.",
+    "mapPlaceholder": "Carte / zone d’intervention : optionnelle."
+  },
+  "faqPage": {
+    "listTitle": "Réponses détaillées",
+    "metaTitle": "FAQ | BCP Tunisia",
+    "metaDescription": "Questions fréquentes sur nos expertises, zones d’intervention et modalités de collaboration.",
+    "h1": "Foire aux questions",
+    "lead": "Réponses courtes sur la couverture, la reprise d’installations existantes et nos modalités de travail.",
+    "items": {
+      "q1": { "q": "Intervenez-vous sur tout le territoire tunisien ?", "a": "Oui, avec organisation logistique adaptée à la localisation et à la criticité du site." },
+      "q2": { "q": "Pouvez-vous reprendre des installations réalisées par un autre intégrateur ?", "a": "Oui : diagnostic, mise en conformité ciblée ou refonte selon un cahier des charges validé ensemble." },
+      "q3": { "q": "Proposez-vous des contrats de maintenance ?", "a": "Oui, avec périmètre, périodicité et niveau de service définis contractuellement." },
+      "q4": { "q": "Comment traiterez-vous ma demande ?", "a": "Qualification téléphonique ou écrite, puis visite si nécessaire, et proposition technique transparente sur le périmètre." }
+    }
+  },
+  "newsPage": {
+    "metaTitle": "Actualités | BCP Tunisia",
+    "metaDescription": "Notes techniques et actualités BCP Tunisia.",
+    "h1": "Actualités & veille",
+    "lead": "Espace optionnel pour communiquer sur vos projets validés, évolutions réglementaires ou retours d’expérience.",
+    "empty": "Aucun article publié pour le moment."
+  },
+  "brochure": {
+    "title": "Documentation",
+    "body": "Demandez une présentation PDF de nos expertises (sans contenu marketing surdimensionné).",
+    "button": "Recevoir la fiche entreprise"
+  },
+  "breadcrumbs": {
+    "home": "Accueil"
+  },
+  "servicePage": {
+    "ctaTitle": "Parlons de votre site",
+    "ctaBody": "Devis, visite technique ou plan de maintenance : décrivez votre besoin et nous vous recontactons.",
+    "ctaQuote": "Demander un devis",
+    "ctaVisit": "Demander une visite / audit",
+    "ctaMaintenance": "Demande maintenance / SAV"
+  },
+  "common": {
+    "readMore": "En savoir plus",
+    "backToServices": "Retour aux expertises",
+    "allServices": "Toutes les expertises",
+    "notFoundTitle": "Page introuvable",
+    "notFoundBody": "Ce contenu n’existe pas ou a été déplacé.",
+    "backHome": "Retour à l’accueil"
+  }
+}

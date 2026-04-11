@@ -1,0 +1,291 @@
+{
+  "nav": {
+    "ariaMain": "Main navigation",
+    "ctaQuote": "Request a quote",
+    "items": {
+      "home": "Home",
+      "company": "Company",
+      "services": "Expertise",
+      "references": "References",
+      "projects": "Projects",
+      "industries": "Industries",
+      "maintenance": "Maintenance & support",
+      "contact": "Contact",
+      "faq": "FAQ",
+      "news": "News"
+    },
+    "groups": {
+      "projectsRefs": "Projects & references",
+      "support": "Support"
+    },
+    "divisions": {
+      "label": "Expertise",
+      "pillars": {
+        "fire-safety": { "title": "Fire safety" },
+        "electronic-security": { "title": "Electronic security" },
+        "industrial-fluids": { "title": "Industrial & tertiary fluids" },
+        "industrial-electrical": { "title": "Industrial & tertiary electrical" },
+        "engineering-services": { "title": "Engineering & services" }
+      }
+    }
+  },
+  "footer": {
+    "brand": "BCP Tunisia — BE CLOSE PROTECTION",
+    "tagline": "From design to maintenance, we secure, equip, and support your industrial and tertiary environments.",
+    "verifyRefs": "Verify official spelling of reference names and communication rights before final publication.",
+    "colExplore": "Explore",
+    "colServices": "Expertise",
+    "ctaTitle": "A technical project?",
+    "ctaBody": "Tell us what you need—our teams will follow up to scope the next steps.",
+    "ctaButton": "Contact BCP Tunisia",
+    "legal": "Head office & contact details: to be completed before go-live.",
+    "rights": "All rights reserved."
+  },
+  "stickyCta": {
+    "quote": "Quote",
+    "expert": "Expert"
+  },
+  "forms": {
+    "name": "Full name",
+    "company": "Company",
+    "phone": "Phone",
+    "email": "Email",
+    "sector": "Sector",
+    "needType": "Type of need",
+    "serviceCategory": "Service category",
+    "message": "Message",
+    "choose": "Select…",
+    "submit": "Send",
+    "sending": "Sending…",
+    "success": "Thank you. Your request has been submitted.",
+    "error": "We could not send your request right now. Please try again or call us.",
+    "validation": {
+      "required": "Required field",
+      "email": "Invalid email"
+    },
+    "honeypot": "Leave blank",
+    "needTypes": {
+      "quote": "Request a quote",
+      "expert": "Talk to an expert",
+      "maintenance": "Maintenance / support request",
+      "audit": "Site visit / audit",
+      "other": "Other"
+    },
+    "serviceCategories": {
+      "fire": "Fire safety",
+      "security": "Electronic security",
+      "fluids": "Fluids",
+      "electrical": "Electrical",
+      "engineering": "Engineering & services",
+      "maintenance": "Maintenance / support",
+      "other": "Other"
+    },
+    "sectors": {
+      "industry": "Industry",
+      "tertiary": "Commercial / office",
+      "health": "Healthcare",
+      "retail": "Retail / large venues",
+      "logistics": "Logistics",
+      "public": "Infrastructure / services",
+      "other": "Other"
+    }
+  },
+  "home": {
+    "metaTitle": "BCP Tunisia — Engineering, installation, and technical maintenance",
+    "metaDescription": "Technical partner in Tunisia for fire safety, electronic security, fluids, electrical, and engineering. Design, installation, commissioning, and maintenance.",
+    "hero": {
+      "kicker": "BE CLOSE PROTECTION",
+      "title": "Engineering and field execution for industrial and tertiary environments.",
+      "subtitle": "From design through installation, commissioning, and maintenance, BCP Tunisia secures, equips, and supports your sites with a focus on reliability and long-term performance.",
+      "ctaQuote": "Request a quote",
+      "ctaExpert": "Talk to an expert",
+      "ctaBrochure": "Request documentation",
+      "heroFormTitle": "Quick contact"
+    },
+    "trust": {
+      "title": "End-to-end delivery",
+      "study": "Design",
+      "install": "Installation",
+      "commission": "Commissioning",
+      "maintain": "Maintenance",
+      "support": "Technical support"
+    },
+    "divisions": {
+      "title": "Five complementary disciplines",
+      "subtitle": "Field and office teams for coherent, documented, maintainable projects.",
+      "cta": "Discover"
+    },
+    "about": {
+      "title": "BCP Tunisia at a glance",
+      "body": "We work with industrial operators, tertiary asset managers, and owners who need one partner to align fire safety, fluids, electrical, and engineering—without fragmenting accountability. Our approach is pragmatic: solutions sized to risk, controlled execution, and follow-up that preserves equipment availability.",
+      "link": "Read the Company page"
+    },
+    "sectors": {
+      "title": "Sectors we serve",
+      "subtitle": "Different contexts—consistent execution standards.",
+      "industry": "Industry & manufacturing",
+      "tertiary": "Commercial & offices",
+      "retail": "Retail & large venues",
+      "health": "Healthcare & hospitality",
+      "logistics": "Logistics & warehousing",
+      "infra": "Infrastructure & sensitive sites"
+    },
+    "method": {
+      "title": "Project method",
+      "subtitle": "A clear path from need definition to post-handover support.",
+      "steps": {
+        "audit": { "title": "Assessment & needs", "body": "Understanding the site, risks, and interfaces with operations." },
+        "design": { "title": "Design & engineering", "body": "Technical choices, drawings, sizing, and specifications." },
+        "install": { "title": "Installation", "body": "Execution, site coordination, and quality control." },
+        "commission": { "title": "Commissioning", "body": "Testing, acceptance, documentation, and handover to your teams." },
+        "maintain": { "title": "Maintenance & follow-up", "body": "Maintenance plans, interventions, and ongoing assistance." }
+      }
+    },
+    "references": {
+      "title": "References",
+      "subtitle": "Organizations that trust us with demanding environments—project details available on request.",
+      "cta": "View all references",
+      "marqueeAria": "Scrolling strip of client reference logos"
+    },
+    "why": {
+      "title": "Why BCP Tunisia",
+      "items": {
+        "one": { "title": "Field experience", "body": "Teams used to real operational constraints—not only paper deliverables." },
+        "two": { "title": "Engineering & execution", "body": "Continuity from design to installation and maintenance to reduce accountability gaps." },
+        "three": { "title": "Safety & compliance", "body": "Systems designed to be tested, maintained, and understood by operators." },
+        "four": { "title": "Long-term support", "body": "Maintenance contracts and assistance to sustain availability after commissioning." }
+      }
+    },
+    "finalCta": {
+      "title": "Ready to structure your next project?",
+      "body": "Describe your context—sector, site type, urgency, and expected scope. We will qualify the request and respond with next steps.",
+      "primary": "Request a quote",
+      "secondary": "Request a site visit / audit"
+    }
+  },
+  "company": {
+    "metaTitle": "Company | BCP Tunisia",
+    "metaDescription": "Positioning, method, and commitment of BCP Tunisia as a technical partner for industrial and tertiary sites.",
+    "h1": "Company",
+    "lead": "BCP Tunisia (BE CLOSE PROTECTION) is a technical partner for industrial and tertiary environments that demand reliability, safety, and sustained performance.",
+    "body1": "We structure our work across the full chain: understanding the need, design, installation, commissioning, and maintenance. That continuity reduces grey areas between engineering and operations and clarifies long-term responsibility.",
+    "body2": "Our tone is deliberately sober: no unverified performance claims, no certifications displayed without formal validation. We focus on practical deliverables—technical dossiers, procedures, maintenance plans—that your teams can use every day.",
+    "valuesTitle": "What guides our work",
+    "values": {
+      "safety": "People and asset safety, without compromising system clarity.",
+      "quality": "Execution quality and on-site control aligned with best practices.",
+      "continuity": "Availability and maintenance to extend performance after handover.",
+      "clarity": "Transparency on scope, interfaces, and responsibilities."
+    },
+    "mediaHeading": "Field & engineering",
+    "mediaBody": "Our teams work on live sites—with the production, access, and safety constraints that entails.",
+    "mediaAlt": "Industrial facility overview (illustration)"
+  },
+  "servicesIndex": {
+    "metaTitle": "Expertise | BCP Tunisia",
+    "metaDescription": "Overview of five pillars: fire, electronic security, fluids, electrical, engineering & services.",
+    "h1": "Expertise",
+    "lead": "Five complementary domains covering critical building and process systems.",
+    "ctaPillar": "View division",
+    "ctaContact": "Speak to an engineer"
+  },
+  "referencesPage": {
+    "metaTitle": "References | BCP Tunisia",
+    "metaDescription": "Organizations that have engaged BCP Tunisia—mission details provided on request.",
+    "h1": "Client references",
+    "lead": "Trust is built over time. Here are organizations we serve or have served—without invented project stories.",
+    "note": "Verify official naming and communication agreements before final publication.",
+    "marqueeAria": "Client reference logos"
+  },
+  "projectsPage": {
+    "metaTitle": "Projects | BCP Tunisia",
+    "metaDescription": "Project approach and deliverables—detailed case studies only when formally approved.",
+    "h1": "Projects",
+    "lead": "We document work for clients; public case studies are shared only after formal approval. Contact us for a sector-relevant dossier.",
+    "placeholder": "Reserved for approved project sheets—populate with validated references."
+  },
+  "industriesPage": {
+    "metaTitle": "Industries | BCP Tunisia",
+    "metaDescription": "Industry, commercial, healthcare, retail, logistics: BCP Tunisia adapts methods and teams to each context.",
+    "h1": "Industries",
+    "lead": "Constraints vary by sector; our method stays consistent: scoping, proportionate design, controlled execution, and follow-up.",
+    "visualHeading": "Different contexts, same standard",
+    "visualBody": "Plants, headquarters, warehouses, or sensitive facilities—we align teams and deliverables with the site’s real criticality.",
+    "visualAlt": "Industrial and logistics site (illustration)",
+    "cards": {
+      "industry": { "title": "Industry & manufacturing", "body": "Production continuity, hazardous areas, utilities, and fire safety integrated with processes." },
+      "tertiary": { "title": "Commercial & offices", "body": "Fire alarm, access, HVAC comfort, and electrical for high-occupancy sites." },
+      "retail": { "title": "Retail & large venues", "body": "Customer flows, queue management, CCTV, and multi-site maintenance." },
+      "health": { "title": "Healthcare & hospitality", "body": "Availability, nurse call, fire safety, and sanitary fluids." },
+      "logistics": { "title": "Logistics", "body": "Sprinklers, detection, video, and electrical for warehouses and hubs." },
+      "infra": { "title": "Infrastructure", "body": "Critical technical systems and supervision for sensitive sites." }
+    }
+  },
+  "maintenancePage": {
+    "metaTitle": "Maintenance & support | BCP Tunisia",
+    "metaDescription": "Maintenance contracts, corrective interventions, and assistance for fire, security, fluids, and electrical systems.",
+    "h1": "Maintenance & after-sales",
+    "lead": "Availability is decided after commissioning. We structure maintenance plans and corrective work aligned to equipment criticality.",
+    "visualHeading": "After handover",
+    "visualBody": "Well-documented, maintained systems keep performance and simplify audits.",
+    "visualAlt": "Technician inspecting building systems (illustration)",
+    "blocks": {
+      "preventive": { "title": "Preventive maintenance", "body": "Cadence, regulatory checks, and readings to anticipate drift." },
+      "corrective": { "title": "Corrective maintenance", "body": "Diagnostics, parts, and return-to-service with actionable reports." },
+      "contract": { "title": "Contracts & SLA", "body": "Clear scope, response time, and escalation per your requirements." }
+    },
+    "cta": "Request a maintenance plan"
+  },
+  "contactPage": {
+    "metaTitle": "Contact & quote | BCP Tunisia",
+    "metaDescription": "Contact BCP Tunisia for a quote, technical visit, or maintenance request.",
+    "h1": "Contact & quote request",
+    "lead": "Describe your need—we will follow up to qualify the request and propose next steps (visit, high-level study, technical proposal).",
+    "asideTitle": "Contact details",
+    "asideBody": "Phone, email, and address: to be completed before publication.",
+    "mapPlaceholder": "Map / service area: optional."
+  },
+  "faqPage": {
+    "listTitle": "Detailed answers",
+    "metaTitle": "FAQ | BCP Tunisia",
+    "metaDescription": "Frequently asked questions about our expertise, coverage, and how we work with clients.",
+    "h1": "Frequently asked questions",
+    "lead": "Short answers on coverage, taking over legacy systems, and how we work with clients.",
+    "items": {
+      "q1": { "q": "Do you work across Tunisia?", "a": "Yes, with logistics adapted to location and site criticality." },
+      "q2": { "q": "Can you take over systems installed by another contractor?", "a": "Yes: assessment, targeted compliance work, or redesign under an agreed scope." },
+      "q3": { "q": "Do you offer maintenance contracts?", "a": "Yes, with scope, cadence, and service levels defined contractually." },
+      "q4": { "q": "How will you handle my request?", "a": "Qualification by phone or email, a visit when needed, and a transparent technical proposal on scope." }
+    }
+  },
+  "newsPage": {
+    "metaTitle": "News | BCP Tunisia",
+    "metaDescription": "Technical notes and news from BCP Tunisia.",
+    "h1": "News & insights",
+    "lead": "Optional space for approved project communications, regulatory updates, or lessons learned.",
+    "empty": "No articles published yet."
+  },
+  "brochure": {
+    "title": "Documentation",
+    "body": "Request a PDF overview of our expertise (no oversized marketing claims).",
+    "button": "Receive the company profile"
+  },
+  "breadcrumbs": {
+    "home": "Home"
+  },
+  "servicePage": {
+    "ctaTitle": "Tell us about your site",
+    "ctaBody": "Quote, technical visit, or maintenance plan—describe your need and we will respond.",
+    "ctaQuote": "Request a quote",
+    "ctaVisit": "Request a site visit / audit",
+    "ctaMaintenance": "Maintenance / support request"
+  },
+  "common": {
+    "readMore": "Learn more",
+    "backToServices": "Back to expertise",
+    "allServices": "All expertise areas",
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "This content does not exist or has been moved.",
+    "backHome": "Back to home"
+  }
+}
