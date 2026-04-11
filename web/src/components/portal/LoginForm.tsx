@@ -4,18 +4,15 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
+import { getOAuthRedirectUrl } from "@/lib/siteUrl";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
 import { buttonClass } from "@/components/ui/button-variants";
-
-function getSiteUrl() {
-  if (typeof window === "undefined") return "";
-  return window.location.origin;
-}
 
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/portal/dashboard";
+  const passwordResetOk = searchParams.get("success") === "password_reset";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -29,7 +26,7 @@ export function LoginForm() {
       const { error: oErr } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${getSiteUrl()}/auth/callback?next=${encodeURIComponent(next)}`,
+          redirectTo: getOAuthRedirectUrl(next),
         },
       });
       if (oErr) setError(oErr.message);
@@ -95,6 +92,11 @@ export function LoginForm() {
         </div>
       </div>
       <form onSubmit={onSubmit} className="space-y-4">
+        {passwordResetOk ? (
+          <p className="rounded-lg border border-emerald-200/80 bg-[var(--status-success-bg)] px-3 py-2 text-sm text-[var(--status-success-fg)]">
+            Mot de passe mis à jour. Vous pouvez vous connecter.
+          </p>
+        ) : null}
         <div>
           <label htmlFor="email" className="block text-xs font-medium text-bcp-muted">
             E-mail

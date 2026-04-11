@@ -3,12 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
+import { getPasswordRecoveryRedirectUrl } from "@/lib/siteUrl";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
-
-function getSiteUrl() {
-  if (typeof window === "undefined") return "";
-  return window.location.origin;
-}
 
 export function ForgotPasswordForm() {
   const [email, setEmail] = useState("");
@@ -30,7 +26,7 @@ export function ForgotPasswordForm() {
         return;
       }
       const { error: rErr } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${getSiteUrl()}/auth/callback?next=/portal/dashboard`,
+        redirectTo: getPasswordRecoveryRedirectUrl(),
       });
       if (rErr) {
         setError(rErr.message);

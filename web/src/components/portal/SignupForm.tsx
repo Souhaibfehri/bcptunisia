@@ -3,12 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
+import { getSignupEmailRedirectUrl } from "@/lib/siteUrl";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
-
-function getSiteUrl() {
-  if (typeof window === "undefined") return "";
-  return window.location.origin;
-}
 
 export function SignupForm() {
   const [email, setEmail] = useState("");
@@ -35,7 +31,7 @@ export function SignupForm() {
         email,
         password,
         options: {
-          emailRedirectTo: `${getSiteUrl()}/auth/callback?next=/portal/dashboard`,
+          emailRedirectTo: getSignupEmailRedirectUrl(),
           data: { full_name: displayName },
         },
       });
