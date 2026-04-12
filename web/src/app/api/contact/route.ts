@@ -22,7 +22,10 @@ export async function POST(req: Request) {
     const { website: _h, recaptchaToken, ...rest } = parsed.data;
     void _h;
 
-    const captcha = await verifyPublicLeadRecaptchaCheckboxToken(recaptchaToken);
+    const captcha = await verifyPublicLeadRecaptchaCheckboxToken(recaptchaToken, {
+      referer: req.headers.get("referer"),
+      userAgent: req.headers.get("user-agent"),
+    });
     if (!captcha.ok) {
       if (captcha.reason === "misconfigured") {
         return NextResponse.json({ ok: false, error: "server_config" }, { status: 503 });
