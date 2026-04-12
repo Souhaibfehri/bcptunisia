@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getResolvedSiteSettings } from "@/lib/cms/siteResolved";
 import { notifyNewPublicLead } from "@/lib/crm/notifyRecipients";
 import { insertPublicLead, publicLeadFormSchema } from "@/lib/leads/publicSubmission";
+import { isRecaptchaVerificationEnabled } from "@/lib/recaptcha/config";
+import { verifyRecaptchaEnterprise } from "@/lib/recaptcha/verify";
 
 async function resolveRecipient(): Promise<string> {
   const env = process.env.CONTACT_FORM_RECIPIENT?.trim();
@@ -18,8 +20,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, issues: parsed.error.flatten() }, { status: 400 });
     }
 
-    const { website: _h, ...rest } = parsed.data;
+    const { website: _h, recaptchaToken, ...rest } = parsed.data;
     void _h;
+
+    if (isRecaptchaVerificationEnabled()) {
+      const captcha = await verifyRecaptchaEnterprise(recaptchaToken, "CONTACT_FORM");
+      if (!captcha.ok) {
+        return NextResponse.json({ ok: false, error: "recaptcha" }, { status: 403 });
+      }
+    }
 
     const referer = req.headers.get("referer");
     const result = await insertPublicLead(rest, { referer });

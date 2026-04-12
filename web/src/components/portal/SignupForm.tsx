@@ -6,6 +6,7 @@ import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import type { AppLocale } from "@/lib/appLocale";
 import { getLocalizedSignupEmailRedirectUrl } from "@/lib/publicSite";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
+import { verifyRecaptchaPreflightOnClient } from "@/lib/recaptcha/clientPreflight";
 
 export function SignupForm({ locale }: { locale: AppLocale }) {
   const [email, setEmail] = useState("");
@@ -21,6 +22,11 @@ export function SignupForm({ locale }: { locale: AppLocale }) {
     setMessage(null);
     setLoading(true);
     try {
+      const captcha = await verifyRecaptchaPreflightOnClient("SIGNUP");
+      if (!captcha.ok) {
+        setError(captcha.message);
+        return;
+      }
       let supabase;
       try {
         supabase = createBrowserSupabaseClient();

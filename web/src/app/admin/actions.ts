@@ -6,6 +6,7 @@ import { createServerSupabaseClient, createServiceRoleClient } from "@/lib/supab
 import { parseAppLocale } from "@/lib/appLocale";
 import { getLocalizedAuthCallbackUrl } from "@/lib/serverPublicSite";
 import { fetchInternalProjectMemberUserIds, notifyUsers } from "@/lib/notifications/server";
+import { assertRecaptchaFromFormData } from "@/lib/recaptcha/serverForm";
 
 /** Full admin: super_admin / admin only — for user, client, and global management */
 async function requireFullAdmin() {
@@ -191,6 +192,8 @@ export async function inviteUser(formData: FormData) {
   const redirectTo = String(formData.get("redirect_to") ?? "/admin/users").trim();
   const authLocale = parseAppLocale(String(formData.get("auth_locale") ?? "").trim() || null);
 
+  await assertRecaptchaFromFormData(formData, "INVITE_USER", redirectTo);
+
   if (!email) redirectError(redirectTo, "E-mail requis");
 
   await requireFullAdmin();
@@ -232,6 +235,8 @@ export async function createUserDirect(formData: FormData) {
   const role = String(formData.get("role") ?? "collaborator").trim();
   const clientId = String(formData.get("client_id") ?? "").trim() || null;
   const redirectTo = String(formData.get("redirect_to") ?? "/admin/users").trim();
+
+  await assertRecaptchaFromFormData(formData, "CREATE_USER", redirectTo);
 
   const validRoles = [
     "super_admin",

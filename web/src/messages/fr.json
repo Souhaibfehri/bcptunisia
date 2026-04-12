@@ -59,6 +59,7 @@
     "sending": "Envoi…",
     "success": "Merci. Votre demande a été transmise.",
     "error": "Envoi impossible pour le moment. Réessayez ou contactez-nous par téléphone.",
+    "recaptchaFailed": "La vérification de sécurité a échoué. Réessayez.",
     "validation": {
       "required": "Champ requis",
       "email": "E-mail invalide"

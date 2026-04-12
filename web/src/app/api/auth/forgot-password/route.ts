@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { parseAppLocale } from "@/lib/appLocale";
 import { getLocalizedPasswordRecoveryUrl } from "@/lib/serverPublicSite";
+import { isRecaptchaVerificationEnabled } from "@/lib/recaptcha/config";
+import { verifyRecaptchaEnterprise } from "@/lib/recaptcha/verify";
 import { getSupabasePublicKey, getSupabaseUrl } from "@/utils/supabase/config";
 
 export async function POST(request: Request) {
@@ -22,8 +24,20 @@ export async function POST(request: Request) {
       ? String((body as { locale?: unknown }).locale ?? "").trim()
       : "";
 
+  const recaptchaToken =
+    typeof body === "object" && body !== null && "recaptchaToken" in body
+      ? String((body as { recaptchaToken?: unknown }).recaptchaToken ?? "").trim()
+      : "";
+
   if (!email || !email.includes("@")) {
     return NextResponse.json({ ok: false }, { status: 400 });
+  }
+
+  if (isRecaptchaVerificationEnabled()) {
+    const captcha = await verifyRecaptchaEnterprise(recaptchaToken, "RESET_PASSWORD_REQUEST");
+    if (!captcha.ok) {
+      return NextResponse.json({ ok: false, error: "recaptcha" }, { status: 403 });
+    }
   }
 
   const url = getSupabaseUrl();

@@ -1,28 +1,33 @@
 import { z } from "zod";
 import { createServiceRoleClient } from "@/lib/supabase/server";
 
-export const publicLeadFormSchema = z
-  .object({
-    locale: z.enum(["fr", "en", "ar"]),
-    name: z.string().min(2).max(120),
-    company: z.string().min(2).max(120),
-    phone: z.string().min(6).max(40),
-    email: z.string().email().max(120),
-    sector: z.string().min(2).max(60),
-    needType: z.string().min(2).max(60),
-    serviceCategory: z.string().min(2).max(60),
-    message: z.string().min(10).max(8000),
-    website: z.string().max(0).optional(),
-    sourcePage: z.string().max(500).optional(),
-    sourceForm: z.string().max(120).optional(),
-    sourceType: z.string().max(60).optional(),
-    utmSource: z.string().max(120).optional(),
-    utmMedium: z.string().max(120).optional(),
-    utmCampaign: z.string().max(120).optional(),
+const publicLeadFieldsSchema = z.object({
+  locale: z.enum(["fr", "en", "ar"]),
+  name: z.string().min(2).max(120),
+  company: z.string().min(2).max(120),
+  phone: z.string().min(6).max(40),
+  email: z.string().email().max(120),
+  sector: z.string().min(2).max(60),
+  needType: z.string().min(2).max(60),
+  serviceCategory: z.string().min(2).max(60),
+  message: z.string().min(10).max(8000),
+  website: z.string().max(0).optional(),
+  sourcePage: z.string().max(500).optional(),
+  sourceForm: z.string().max(120).optional(),
+  sourceType: z.string().max(60).optional(),
+  utmSource: z.string().max(120).optional(),
+  utmMedium: z.string().max(120).optional(),
+  utmCampaign: z.string().max(120).optional(),
+});
+
+/** Parsed JSON body for `POST /api/contact` (includes optional Enterprise token; stripped before DB). */
+export const publicLeadFormSchema = publicLeadFieldsSchema
+  .extend({
+    recaptchaToken: z.string().max(8000).optional(),
   })
   .strict();
 
-export type PublicLeadPayload = z.infer<typeof publicLeadFormSchema>;
+export type PublicLeadPayload = z.infer<typeof publicLeadFieldsSchema>;
 
 export type PublicLeadRequestMeta = {
   referer?: string | null;

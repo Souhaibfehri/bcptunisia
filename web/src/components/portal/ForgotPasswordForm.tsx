@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { AppLocale } from "@/lib/appLocale";
+import { executeRecaptchaEnterprise } from "@/components/recaptcha/executeEnterprise";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
 
 export function ForgotPasswordForm({ locale }: { locale: AppLocale }) {
@@ -17,17 +18,25 @@ export function ForgotPasswordForm({ locale }: { locale: AppLocale }) {
     setMessage(null);
     setLoading(true);
     try {
+      const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
+      const recaptchaToken = siteKey ? await executeRecaptchaEnterprise("RESET_PASSWORD_REQUEST") : "";
+      if (siteKey && !recaptchaToken) {
+        setError("Vérification de sécurité échouée. Réessayez.");
+        return;
+      }
       const res = await fetch("/api/auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, locale }),
+        body: JSON.stringify({ email, locale, recaptchaToken: recaptchaToken || undefined }),
       });
       if (!res.ok) {
         const data = (await res.json().catch(() => null)) as { error?: string } | null;
         setError(
           data?.error === "config"
             ? "Configuration serveur incomplète."
-            : "Impossible d’envoyer la demande. Réessayez.",
+            : data?.error === "recaptcha"
+              ? "Vérification de sécurité échouée. Réessayez."
+              : "Impossible d’envoyer la demande. Réessayez.",
         );
         return;
       }

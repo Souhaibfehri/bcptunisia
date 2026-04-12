@@ -1,5 +1,6 @@
 "use client";
 
+import { executeRecaptchaEnterprise } from "@/components/recaptcha/executeEnterprise";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -50,6 +51,13 @@ export function LeadForm({
     }
     setStatus("sending");
     try {
+      const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
+      const recaptchaToken = siteKey ? await executeRecaptchaEnterprise("CONTACT_FORM") : "";
+      if (siteKey && !recaptchaToken) {
+        setStatus("err");
+        setServerHint(t("recaptchaFailed"));
+        return;
+      }
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -67,6 +75,7 @@ export function LeadForm({
           sourceType,
           sourceForm: "LeadForm",
           sourcePage: pathname || undefined,
+          recaptchaToken: recaptchaToken || undefined,
         }),
       });
       const json = (await res.json()) as {
@@ -76,6 +85,11 @@ export function LeadForm({
         message?: string;
       };
 
+      if (res.status === 403 && json.error === "recaptcha") {
+        setStatus("err");
+        setServerHint(t("recaptchaFailed"));
+        return;
+      }
       if (res.status === 429) {
         setStatus("err");
         setServerHint(json.message ?? "Merci d'attendre avant un nouvel envoi.");

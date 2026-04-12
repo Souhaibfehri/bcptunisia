@@ -8,6 +8,7 @@ import type { AppLocale } from "@/lib/appLocale";
 import { getOAuthRedirectUrl } from "@/lib/publicSite";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
 import { buttonClass } from "@/components/ui/button-variants";
+import { verifyRecaptchaPreflightOnClient } from "@/lib/recaptcha/clientPreflight";
 
 export function LoginForm({ locale }: { locale: AppLocale }) {
   const router = useRouter();
@@ -43,6 +44,11 @@ export function LoginForm({ locale }: { locale: AppLocale }) {
     setError(null);
     setLoading(true);
     try {
+      const captcha = await verifyRecaptchaPreflightOnClient("LOGIN");
+      if (!captcha.ok) {
+        setError(captcha.message);
+        return;
+      }
       let supabase;
       try {
         supabase = createBrowserSupabaseClient();
