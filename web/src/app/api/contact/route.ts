@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getResolvedSiteSettings } from "@/lib/cms/siteResolved";
 import { notifyNewPublicLead } from "@/lib/crm/notifyRecipients";
 import { insertPublicLead, publicLeadFormSchema } from "@/lib/leads/publicSubmission";
-import { verifyPublicLeadRecaptchaCheckboxToken } from "@/lib/recaptcha/contactLeadCheckboxVerify";
+import { verifyEnterpriseCheckboxAssessment } from "@/lib/recaptcha/verify";
 
 async function resolveRecipient(): Promise<string> {
   const env = process.env.CONTACT_FORM_RECIPIENT?.trim();
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     const { website: _h, recaptchaToken, ...rest } = parsed.data;
     void _h;
 
-    const captcha = await verifyPublicLeadRecaptchaCheckboxToken(recaptchaToken, {
+    const captcha = await verifyEnterpriseCheckboxAssessment(recaptchaToken, {
       referer: req.headers.get("referer"),
       userAgent: req.headers.get("user-agent"),
     });

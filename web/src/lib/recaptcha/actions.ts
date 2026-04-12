@@ -1,4 +1,4 @@
-/** Must match `grecaptcha.enterprise.execute(..., { action })` on the client. */
+/** Actions accepted by `/api/recaptcha/verify` (audit / validation; checkbox tokens are not action-scoped). */
 export const RECAPTCHA_ACTIONS = [
   "LOGIN",
   "SIGNUP",

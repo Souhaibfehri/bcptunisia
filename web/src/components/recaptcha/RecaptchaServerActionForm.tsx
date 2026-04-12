@@ -1,25 +1,32 @@
 "use client";
 
-import { useState, useTransition, type ReactNode } from "react";
+import { useRef, useState, useTransition, type ReactNode } from "react";
 import type { RecaptchaAction } from "@/lib/recaptcha/actions";
-import { executeRecaptchaEnterprise } from "@/components/recaptcha/executeEnterprise";
+import {
+  EnterpriseRecaptchaCheckbox,
+  readEnterpriseCheckboxToken,
+} from "@/components/recaptcha/EnterpriseRecaptchaCheckbox";
 
 type ServerAction = (formData: FormData) => Promise<void>;
 
 export function RecaptchaServerActionForm({
   action,
-  recaptchaAction,
+  recaptchaAction: _recaptchaAction,
   formClassName,
   children,
 }: {
   action: ServerAction;
+  /** Passed by admin forms for clarity; server actions still assert the matching action. */
   recaptchaAction: RecaptchaAction;
   /** Tailwind layout for the form (e.g. `mt-4 flex flex-wrap items-end gap-3`). */
   formClassName: string;
   children: ReactNode;
 }) {
+  void _recaptchaAction; // prop documents intent; token is verified server-side with the action from each action handler
+  const widgetIdRef = useRef<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -27,9 +34,8 @@ export function RecaptchaServerActionForm({
     const form = e.currentTarget;
     startTransition(async () => {
       const fd = new FormData(form);
-      const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
       if (siteKey) {
-        const token = await executeRecaptchaEnterprise(recaptchaAction);
+        const token = readEnterpriseCheckboxToken(widgetIdRef.current);
         if (!token) {
           setError("Vérification de sécurité échouée. Réessayez.");
           return;
@@ -49,6 +55,11 @@ export function RecaptchaServerActionForm({
         <p className="mb-2 w-full basis-full text-sm text-red-600" role="alert">
           {error}
         </p>
+      ) : null}
+      {siteKey ? (
+        <div className="w-full basis-full">
+          <EnterpriseRecaptchaCheckbox siteKey={siteKey} widgetIdRef={widgetIdRef} className="mb-2" />
+        </div>
       ) : null}
       {children}
     </form>

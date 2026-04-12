@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, type MutableRefObject } from "react";
 
-/** Dedicated tag so we never rely on `enterprise.js?render=` (portal/score) for the checkbox widget. */
-const LEAD_CHECKBOX_SCRIPT_ID = "recaptcha-enterprise-lead-checkbox";
+/** Dedicated script id so checkbox flow never loads `enterprise.js?render=`. */
+const ENTERPRISE_CHECKBOX_SCRIPT_ID = "recaptcha-enterprise-checkbox";
 
-function safeEnterpriseScriptForCheckbox(): HTMLScriptElement | null {
+function enterpriseScriptWithoutRender(): HTMLScriptElement | null {
   const nodes = document.querySelectorAll<HTMLScriptElement>('script[src*="recaptcha/enterprise.js"]');
   for (const s of nodes) {
     if (!s.src.includes("render=")) return s;
@@ -22,10 +22,9 @@ type Props = {
 
 /**
  * Visible reCAPTCHA Enterprise checkbox.
- * Loads `https://www.google.com/recaptcha/enterprise.js` without `?render=` so it does not
- * conflict with portal flows that load `enterprise.js?render=SITE_KEY` for score/execute.
+ * Loads `https://www.google.com/recaptcha/enterprise.js` without `?render=`.
  */
-export function LeadFormEnterpriseCheckbox({ siteKey, widgetIdRef, className }: Props) {
+export function EnterpriseRecaptchaCheckbox({ siteKey, widgetIdRef, className }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -51,13 +50,13 @@ export function LeadFormEnterpriseCheckbox({ siteKey, widgetIdRef, className }: 
       });
     }
 
-    if (safeEnterpriseScriptForCheckbox()) {
+    if (enterpriseScriptWithoutRender()) {
       bootstrap();
-    } else if (document.getElementById(LEAD_CHECKBOX_SCRIPT_ID)) {
+    } else if (document.getElementById(ENTERPRISE_CHECKBOX_SCRIPT_ID)) {
       bootstrap();
     } else {
       const script = document.createElement("script");
-      script.id = LEAD_CHECKBOX_SCRIPT_ID;
+      script.id = ENTERPRISE_CHECKBOX_SCRIPT_ID;
       script.src = "https://www.google.com/recaptcha/enterprise.js";
       script.async = true;
       script.defer = true;
@@ -74,12 +73,12 @@ export function LeadFormEnterpriseCheckbox({ siteKey, widgetIdRef, className }: 
   return <div className={className} ref={containerRef} />;
 }
 
-export function readLeadCheckboxToken(widgetId: number | null): string {
+export function readEnterpriseCheckboxToken(widgetId: number | null): string {
   if (widgetId == null || typeof window === "undefined") return "";
   return window.grecaptcha?.enterprise?.getResponse?.(widgetId)?.trim() ?? "";
 }
 
-export function resetLeadCheckbox(widgetId: number | null): void {
+export function resetEnterpriseCheckbox(widgetId: number | null): void {
   if (widgetId == null || typeof window === "undefined") return;
   window.grecaptcha?.enterprise?.reset?.(widgetId);
 }

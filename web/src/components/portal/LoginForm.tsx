@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import {
+  EnterpriseRecaptchaCheckbox,
+  readEnterpriseCheckboxToken,
+  resetEnterpriseCheckbox,
+} from "@/components/recaptcha/EnterpriseRecaptchaCheckbox";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import type { AppLocale } from "@/lib/appLocale";
+import { verifyPortalRecaptchaPreflight } from "@/lib/recaptcha/portalRecaptchaPreflight";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
-import { verifyRecaptchaPreflightOnClient } from "@/lib/recaptcha/clientPreflight";
 
 export function LoginForm({ locale }: { locale: AppLocale }) {
   const router = useRouter();
@@ -17,15 +22,23 @@ export function LoginForm({ locale }: { locale: AppLocale }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const captchaWidgetIdRef = useRef<number | null>(null);
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setLoading(true);
     try {
-      const captcha = await verifyRecaptchaPreflightOnClient("LOGIN");
+      const token = siteKey ? readEnterpriseCheckboxToken(captchaWidgetIdRef.current) : "";
+      if (siteKey && !token) {
+        setError("Vérification de sécurité échouée. Réessayez.");
+        return;
+      }
+      const captcha = await verifyPortalRecaptchaPreflight(token, "LOGIN");
       if (!captcha.ok) {
         setError(captcha.message);
+        resetEnterpriseCheckbox(captchaWidgetIdRef.current);
         return;
       }
       let supabase;
@@ -85,6 +98,9 @@ export function LoginForm({ locale }: { locale: AppLocale }) {
             className="mt-1 bcp-input"
           />
         </div>
+        {siteKey ? (
+          <EnterpriseRecaptchaCheckbox siteKey={siteKey} widgetIdRef={captchaWidgetIdRef} className="pt-1" />
+        ) : null}
         {error ? <p className="text-sm text-red-600">{error}</p> : null}
         <button
           type="submit"

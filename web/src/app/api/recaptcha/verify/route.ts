@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { isRecaptchaAction } from "@/lib/recaptcha/actions";
 import { isRecaptchaVerificationEnabled } from "@/lib/recaptcha/config";
-import { verifyRecaptchaEnterprise } from "@/lib/recaptcha/verify";
+import { verifyEnterpriseCheckboxAssessment } from "@/lib/recaptcha/verify";
 
 /**
  * Pre-flight verification for client-only Supabase flows (email/password login & signup).
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, skipped: true });
   }
 
-  const result = await verifyRecaptchaEnterprise(token, actionRaw, {
+  const result = await verifyEnterpriseCheckboxAssessment(token, {
     referer: req.headers.get("referer"),
     userAgent: req.headers.get("user-agent"),
   });

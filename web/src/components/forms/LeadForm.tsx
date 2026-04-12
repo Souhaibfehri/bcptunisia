@@ -1,10 +1,10 @@
 "use client";
 
 import {
-  LeadFormEnterpriseCheckbox,
-  readLeadCheckboxToken,
-  resetLeadCheckbox,
-} from "@/components/forms/LeadFormEnterpriseCheckbox";
+  EnterpriseRecaptchaCheckbox,
+  readEnterpriseCheckboxToken,
+  resetEnterpriseCheckbox,
+} from "@/components/recaptcha/EnterpriseRecaptchaCheckbox";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
@@ -57,7 +57,7 @@ export function LeadForm({
     }
     setStatus("sending");
     try {
-      const recaptchaToken = siteKey ? readLeadCheckboxToken(captchaWidgetIdRef.current) : "";
+      const recaptchaToken = siteKey ? readEnterpriseCheckboxToken(captchaWidgetIdRef.current) : "";
       if (siteKey && !recaptchaToken) {
         setStatus("err");
         setServerHint(t("captchaRequired"));
@@ -114,7 +114,7 @@ export function LeadForm({
       }
       setStatus("ok");
       form.reset();
-      resetLeadCheckbox(captchaWidgetIdRef.current);
+      resetEnterpriseCheckbox(captchaWidgetIdRef.current);
     } catch {
       setStatus("err");
       setServerHint(errorMessage ?? t("error"));
@@ -234,7 +234,7 @@ export function LeadForm({
       </div>
       {siteKey ? (
         <div className="flex justify-center py-1">
-          <LeadFormEnterpriseCheckbox siteKey={siteKey} widgetIdRef={captchaWidgetIdRef} />
+          <EnterpriseRecaptchaCheckbox siteKey={siteKey} widgetIdRef={captchaWidgetIdRef} />
         </div>
       ) : null}
       <button

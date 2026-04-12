@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
+import {
+  EnterpriseRecaptchaCheckbox,
+  readEnterpriseCheckboxToken,
+  resetEnterpriseCheckbox,
+} from "@/components/recaptcha/EnterpriseRecaptchaCheckbox";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import type { AppLocale } from "@/lib/appLocale";
 import { getLocalizedSignupEmailRedirectUrl } from "@/lib/publicSite";
+import { verifyPortalRecaptchaPreflight } from "@/lib/recaptcha/portalRecaptchaPreflight";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
-import { verifyRecaptchaPreflightOnClient } from "@/lib/recaptcha/clientPreflight";
 
 export function SignupForm({ locale }: { locale: AppLocale }) {
   const [email, setEmail] = useState("");
@@ -15,6 +20,8 @@ export function SignupForm({ locale }: { locale: AppLocale }) {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const captchaWidgetIdRef = useRef<number | null>(null);
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,9 +29,15 @@ export function SignupForm({ locale }: { locale: AppLocale }) {
     setMessage(null);
     setLoading(true);
     try {
-      const captcha = await verifyRecaptchaPreflightOnClient("SIGNUP");
+      const token = siteKey ? readEnterpriseCheckboxToken(captchaWidgetIdRef.current) : "";
+      if (siteKey && !token) {
+        setError("Vérification de sécurité échouée. Réessayez.");
+        return;
+      }
+      const captcha = await verifyPortalRecaptchaPreflight(token, "SIGNUP");
       if (!captcha.ok) {
         setError(captcha.message);
+        resetEnterpriseCheckbox(captchaWidgetIdRef.current);
         return;
       }
       let supabase;
@@ -98,6 +111,9 @@ export function SignupForm({ locale }: { locale: AppLocale }) {
             className="mt-1 bcp-input"
           />
         </div>
+        {siteKey ? (
+          <EnterpriseRecaptchaCheckbox siteKey={siteKey} widgetIdRef={captchaWidgetIdRef} className="pt-1" />
+        ) : null}
         {error ? (
           <p className="rounded-lg border border-red-200/80 bg-[var(--status-danger-bg)] px-3 py-2 text-sm text-[var(--status-danger-fg)]">{error}</p>
         ) : null}

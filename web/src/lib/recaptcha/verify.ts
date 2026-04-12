@@ -1,10 +1,7 @@
-import type { RecaptchaAction } from "./actions";
 import {
-  getMinScore,
   getRecaptchaApiKey,
   getRecaptchaProjectId,
   getRecaptchaSiteKey,
-  isRecaptchaVerificationEnabled,
 } from "./config";
 
 /** Forward browser headers so API keys restricted by HTTP referrer work from server-side fetch. */
@@ -26,21 +23,34 @@ export function buildRecaptchaAssessmentHeaders(
   return headers;
 }
 
-export type RecaptchaVerifyResult =
-  | { ok: true; score: number }
+function trimEnv(key: string): string {
+  return process.env[key]?.trim() ?? "";
+}
+
+/**
+ * Site key sent in CreateAssessment must match the key embedded in the checkbox widget.
+ * Prefer `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`; allow legacy `RECAPTCHA_SITE_KEY` when set alone.
+ */
+function siteKeyForCheckboxAssessment(): string {
+  return getRecaptchaSiteKey() || trimEnv("RECAPTCHA_SITE_KEY");
+}
+
+export type RecaptchaCheckboxVerifyResult =
+  | { ok: true }
   | { ok: false; reason: "missing_token" | "misconfigured" | "invalid" | "upstream" };
 
 /**
- * Verifies a reCAPTCHA Enterprise score token (server-only).
- * Does not log the token. On misconfiguration or when disabled, returns ok with score 1 (skip).
+ * Verifies a reCAPTCHA Enterprise **checkbox** token (server-only).
+ * When there is no public site key, returns ok (no widget / local dev).
+ * Does not log the token.
  */
-export async function verifyRecaptchaEnterprise(
+export async function verifyEnterpriseCheckboxAssessment(
   token: string | null | undefined,
-  expectedAction: RecaptchaAction,
   requestContext?: RecaptchaAssessmentRequestContext,
-): Promise<RecaptchaVerifyResult> {
-  if (!isRecaptchaVerificationEnabled()) {
-    return { ok: true, score: 1 };
+): Promise<RecaptchaCheckboxVerifyResult> {
+  const publicSiteKey = getRecaptchaSiteKey();
+  if (!publicSiteKey) {
+    return { ok: true };
   }
 
   const trimmed = (token ?? "").trim();
@@ -50,8 +60,13 @@ export async function verifyRecaptchaEnterprise(
 
   const projectId = getRecaptchaProjectId();
   const apiKey = getRecaptchaApiKey();
-  const siteKey = getRecaptchaSiteKey();
+  const siteKey = siteKeyForCheckboxAssessment();
   if (!projectId || !apiKey || !siteKey) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn(
+        "[recaptcha] misconfigured: need RECAPTCHA_PROJECT_ID, RECAPTCHA_API_KEY (or RECAPTCHA_SECRET_KEY), site key",
+      );
+    }
     return { ok: false, reason: "misconfigured" };
   }
 
@@ -66,7 +81,6 @@ export async function verifyRecaptchaEnterprise(
         event: {
           token: trimmed,
           siteKey,
-          expectedAction,
         },
       }),
       cache: "no-store",
@@ -87,18 +101,15 @@ export async function verifyRecaptchaEnterprise(
     } catch {
       errMsg = errText.slice(0, 200);
     }
-    console.warn("[recaptcha] assessment HTTP", expectedAction, res.status, errMsg || "(no body)");
+    console.warn("[recaptcha] assessment HTTP", res.status, errMsg || "(no body)");
     return { ok: false, reason: "upstream" };
   }
 
   const data = (await res.json()) as {
-    tokenProperties?: { valid?: boolean; action?: string; invalidReason?: string };
-    riskAnalysis?: { reasons?: string[]; score?: number };
+    tokenProperties?: { valid?: boolean; invalidReason?: string };
   };
 
   const valid = data.tokenProperties?.valid === true;
-  const action = data.tokenProperties?.action;
-  const score = typeof data.riskAnalysis?.score === "number" ? data.riskAnalysis.score : 0;
 
   if (!valid) {
     if (process.env.NODE_ENV === "development") {
@@ -107,20 +118,5 @@ export async function verifyRecaptchaEnterprise(
     return { ok: false, reason: "invalid" };
   }
 
-  if (action !== expectedAction) {
-    if (process.env.NODE_ENV === "development") {
-      console.warn("[recaptcha] action mismatch", { expected: expectedAction, got: action });
-    }
-    return { ok: false, reason: "invalid" };
-  }
-
-  const min = getMinScore(expectedAction);
-  if (score < min) {
-    if (process.env.NODE_ENV === "development") {
-      console.warn("[recaptcha] low score", { score, min, action: expectedAction });
-    }
-    return { ok: false, reason: "invalid" };
-  }
-
-  return { ok: true, score };
+  return { ok: true };
 }

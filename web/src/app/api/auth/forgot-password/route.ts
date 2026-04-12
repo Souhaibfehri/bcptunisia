@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { parseAppLocale } from "@/lib/appLocale";
 import { getLocalizedPasswordRecoveryUrl } from "@/lib/serverPublicSite";
 import { isRecaptchaVerificationEnabled } from "@/lib/recaptcha/config";
-import { verifyRecaptchaEnterprise } from "@/lib/recaptcha/verify";
+import { verifyEnterpriseCheckboxAssessment } from "@/lib/recaptcha/verify";
 import { getSupabasePublicKey, getSupabaseUrl } from "@/utils/supabase/config";
 
 export async function POST(request: Request) {
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
   }
 
   if (isRecaptchaVerificationEnabled()) {
-    const captcha = await verifyRecaptchaEnterprise(recaptchaToken, "RESET_PASSWORD_REQUEST", {
+    const captcha = await verifyEnterpriseCheckboxAssessment(recaptchaToken, {
       referer: request.headers.get("referer"),
       userAgent: request.headers.get("user-agent"),
     });

@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
+import {
+  EnterpriseRecaptchaCheckbox,
+  readEnterpriseCheckboxToken,
+} from "@/components/recaptcha/EnterpriseRecaptchaCheckbox";
 import type { AppLocale } from "@/lib/appLocale";
-import { executeRecaptchaEnterprise } from "@/components/recaptcha/executeEnterprise";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
 
 export function ForgotPasswordForm({ locale }: { locale: AppLocale }) {
@@ -11,6 +14,8 @@ export function ForgotPasswordForm({ locale }: { locale: AppLocale }) {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const captchaWidgetIdRef = useRef<number | null>(null);
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -18,8 +23,7 @@ export function ForgotPasswordForm({ locale }: { locale: AppLocale }) {
     setMessage(null);
     setLoading(true);
     try {
-      const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
-      const recaptchaToken = siteKey ? await executeRecaptchaEnterprise("RESET_PASSWORD_REQUEST") : "";
+      const recaptchaToken = siteKey ? readEnterpriseCheckboxToken(captchaWidgetIdRef.current) : "";
       if (siteKey && !recaptchaToken) {
         setError("Vérification de sécurité échouée. Réessayez.");
         return;
@@ -65,6 +69,9 @@ export function ForgotPasswordForm({ locale }: { locale: AppLocale }) {
             className="mt-1 w-full rounded-lg border border-bcp-border px-3 py-2 text-sm ring-bcp-focus"
           />
         </div>
+        {siteKey ? (
+          <EnterpriseRecaptchaCheckbox siteKey={siteKey} widgetIdRef={captchaWidgetIdRef} className="pt-1" />
+        ) : null}
         {error ? <p className="text-sm text-red-600">{error}</p> : null}
         {message ? <p className="text-sm text-emerald-700">{message}</p> : null}
         <button
