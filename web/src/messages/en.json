@@ -59,6 +59,7 @@
     "sending": "Sending…",
     "success": "Thank you. Your request has been submitted.",
     "error": "We could not send your request right now. Please try again or call us.",
+    "captchaRequired": "Please complete the captcha.",
     "recaptchaFailed": "Security verification failed. Please try again.",
     "validation": {
       "required": "Required field",

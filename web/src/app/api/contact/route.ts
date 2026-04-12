@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { getResolvedSiteSettings } from "@/lib/cms/siteResolved";
 import { notifyNewPublicLead } from "@/lib/crm/notifyRecipients";
 import { insertPublicLead, publicLeadFormSchema } from "@/lib/leads/publicSubmission";
-import { isRecaptchaVerificationEnabled } from "@/lib/recaptcha/config";
-import { verifyRecaptchaEnterprise } from "@/lib/recaptcha/verify";
+import { verifyPublicLeadRecaptchaCheckboxToken } from "@/lib/recaptcha/contactLeadCheckboxVerify";
 
 async function resolveRecipient(): Promise<string> {
   const env = process.env.CONTACT_FORM_RECIPIENT?.trim();
@@ -23,11 +22,12 @@ export async function POST(req: Request) {
     const { website: _h, recaptchaToken, ...rest } = parsed.data;
     void _h;
 
-    if (isRecaptchaVerificationEnabled()) {
-      const captcha = await verifyRecaptchaEnterprise(recaptchaToken, "CONTACT_FORM");
-      if (!captcha.ok) {
-        return NextResponse.json({ ok: false, error: "recaptcha" }, { status: 403 });
+    const captcha = await verifyPublicLeadRecaptchaCheckboxToken(recaptchaToken);
+    if (!captcha.ok) {
+      if (captcha.reason === "misconfigured") {
+        return NextResponse.json({ ok: false, error: "server_config" }, { status: 503 });
       }
+      return NextResponse.json({ ok: false, error: "recaptcha" }, { status: 403 });
     }
 
     const referer = req.headers.get("referer");

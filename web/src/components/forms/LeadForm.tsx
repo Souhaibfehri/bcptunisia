@@ -1,9 +1,13 @@
 "use client";
 
-import { executeRecaptchaEnterprise } from "@/components/recaptcha/executeEnterprise";
+import {
+  LeadFormEnterpriseCheckbox,
+  readLeadCheckboxToken,
+  resetLeadCheckbox,
+} from "@/components/forms/LeadFormEnterpriseCheckbox";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type Props = {
   compact?: boolean;
@@ -38,6 +42,8 @@ export function LeadForm({
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "err">("idle");
   const [fieldErrors, setFieldErrors] = useState<string[]>([]);
   const [serverHint, setServerHint] = useState<string | null>(null);
+  const captchaWidgetIdRef = useRef<number | null>(null);
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,11 +57,10 @@ export function LeadForm({
     }
     setStatus("sending");
     try {
-      const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
-      const recaptchaToken = siteKey ? await executeRecaptchaEnterprise("CONTACT_FORM") : "";
+      const recaptchaToken = siteKey ? readLeadCheckboxToken(captchaWidgetIdRef.current) : "";
       if (siteKey && !recaptchaToken) {
         setStatus("err");
-        setServerHint(t("recaptchaFailed"));
+        setServerHint(t("captchaRequired"));
         return;
       }
       const res = await fetch("/api/contact", {
@@ -109,6 +114,7 @@ export function LeadForm({
       }
       setStatus("ok");
       form.reset();
+      resetLeadCheckbox(captchaWidgetIdRef.current);
     } catch {
       setStatus("err");
       setServerHint(errorMessage ?? t("error"));
@@ -226,6 +232,11 @@ export function LeadForm({
         </label>
         <textarea id="lf-msg" name="message" required rows={compact ? 3 : 5} className={input} />
       </div>
+      {siteKey ? (
+        <div className="flex justify-center py-1">
+          <LeadFormEnterpriseCheckbox siteKey={siteKey} widgetIdRef={captchaWidgetIdRef} />
+        </div>
+      ) : null}
       <button
         type="submit"
         disabled={status === "sending"}
