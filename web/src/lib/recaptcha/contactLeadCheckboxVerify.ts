@@ -1,5 +1,4 @@
 import { getRecaptchaApiKey, getRecaptchaProjectId } from "@/lib/recaptcha/config";
-import { PUBLIC_LEAD_RECAPTCHA_ACTION } from "@/lib/recaptcha/publicLeadRecaptchaAction";
 
 function trimEnv(key: string): string {
   return process.env[key]?.trim() ?? "";
@@ -14,9 +13,9 @@ function contactRecaptchaServerReady(): boolean {
 }
 
 /**
- * When NEXT_PUBLIC_RECAPTCHA_SITE_KEY is set, the lead form must send a token; server verifies via Enterprise REST assessments (same as verify.ts).
- * Uses RECAPTCHA_SECRET_KEY or RECAPTCHA_API_KEY as the assessments URL query key. Skips when public site key unset.
- * Checkbox: no minimum score; only token validity and optional action match.
+ * Public lead form: Enterprise REST CreateAssessment (checkbox tokens).
+ * Does not send expectedAction — checkbox keys often omit / differ from score actions and
+ * Google may mark assessments invalid if expectedAction mismatches.
  */
 export async function verifyPublicLeadRecaptchaCheckboxToken(
   token: string | null | undefined,
@@ -54,7 +53,6 @@ export async function verifyPublicLeadRecaptchaCheckboxToken(
         event: {
           token: trimmed,
           siteKey,
-          expectedAction: PUBLIC_LEAD_RECAPTCHA_ACTION,
         },
       }),
       cache: "no-store",
@@ -74,22 +72,14 @@ export async function verifyPublicLeadRecaptchaCheckboxToken(
   }
 
   const data = (await res.json()) as {
-    tokenProperties?: { valid?: boolean; action?: string; invalidReason?: string };
+    tokenProperties?: { valid?: boolean; invalidReason?: string };
   };
 
   const valid = data.tokenProperties?.valid === true;
-  const action = data.tokenProperties?.action;
 
   if (!valid) {
     if (process.env.NODE_ENV === "development") {
       console.warn("[recaptcha/contact] invalid", data.tokenProperties?.invalidReason ?? "");
-    }
-    return { ok: false, reason: "invalid" };
-  }
-
-  if (action && action !== PUBLIC_LEAD_RECAPTCHA_ACTION) {
-    if (process.env.NODE_ENV === "development") {
-      console.warn("[recaptcha/contact] action mismatch", { expected: PUBLIC_LEAD_RECAPTCHA_ACTION, got: action });
     }
     return { ok: false, reason: "invalid" };
   }
