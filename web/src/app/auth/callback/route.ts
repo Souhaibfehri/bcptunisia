@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { getCallbackRedirectOrigin, getSafeNextPath } from "@/lib/siteUrl";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/portal/dashboard";
+  const next = getSafeNextPath(searchParams.get("next"));
+  const base = getCallbackRedirectOrigin(request);
 
   if (code) {
     const supabase = await createServerSupabaseClient();
@@ -16,7 +18,7 @@ export async function GET(request: Request) {
       } catch {
         // RPC may not exist yet; profile will be backfilled on next login
       }
-      return NextResponse.redirect(`${origin}${next}`);
+      return NextResponse.redirect(`${base}${next}`);
     }
 
     if (process.env.NODE_ENV === "development") {
@@ -25,6 +27,6 @@ export async function GET(request: Request) {
   }
 
   return NextResponse.redirect(
-    `${origin}/portal/login?error=${encodeURIComponent("Échec de l'authentification. Veuillez réessayer.")}`,
+    `${base}/portal/login?error=${encodeURIComponent("Échec de l'authentification. Veuillez réessayer.")}`,
   );
 }

@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
-import { getPasswordRecoveryRedirectUrl } from "@/lib/siteUrl";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
 
 export function ForgotPasswordForm() {
@@ -18,18 +16,18 @@ export function ForgotPasswordForm() {
     setMessage(null);
     setLoading(true);
     try {
-      let supabase;
-      try {
-        supabase = createBrowserSupabaseClient();
-      } catch (cfgErr) {
-        setError(describeSupabaseAuthError(cfgErr));
-        return;
-      }
-      const { error: rErr } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: getPasswordRecoveryRedirectUrl(),
+      const res = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
       });
-      if (rErr) {
-        setError(rErr.message);
+      if (!res.ok) {
+        const data = (await res.json().catch(() => null)) as { error?: string } | null;
+        setError(
+          data?.error === "config"
+            ? "Configuration serveur incomplète."
+            : "Impossible d’envoyer la demande. Réessayez.",
+        );
         return;
       }
       setMessage("Si un compte existe pour cet e-mail, un lien de réinitialisation a été envoyé.");
