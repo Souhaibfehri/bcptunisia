@@ -13,9 +13,12 @@ export function getRecaptchaProjectId(): string {
   return trimEnv("RECAPTCHA_PROJECT_ID");
 }
 
-/** API key for `assessments?key=` (stored server-only; never expose to client). */
+/**
+ * Google Cloud API key for `.../assessments?key=` (string like `AIza...`).
+ * Prefer RECAPTCHA_API_KEY. Do not put the full assessments URL here — only the key value.
+ */
 export function getRecaptchaApiKey(): string {
-  return trimEnv("RECAPTCHA_SECRET_KEY") || trimEnv("RECAPTCHA_API_KEY");
+  return trimEnv("RECAPTCHA_API_KEY") || trimEnv("RECAPTCHA_SECRET_KEY");
 }
 
 function parseScore(key: string, fallback: number): number {

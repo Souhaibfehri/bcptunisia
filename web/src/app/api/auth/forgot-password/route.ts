@@ -34,7 +34,10 @@ export async function POST(request: Request) {
   }
 
   if (isRecaptchaVerificationEnabled()) {
-    const captcha = await verifyRecaptchaEnterprise(recaptchaToken, "RESET_PASSWORD_REQUEST");
+    const captcha = await verifyRecaptchaEnterprise(recaptchaToken, "RESET_PASSWORD_REQUEST", {
+      referer: request.headers.get("referer"),
+      userAgent: request.headers.get("user-agent"),
+    });
     if (!captcha.ok) {
       return NextResponse.json({ ok: false, error: "recaptcha" }, { status: 403 });
     }

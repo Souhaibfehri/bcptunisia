@@ -24,7 +24,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, skipped: true });
   }
 
-  const result = await verifyRecaptchaEnterprise(token, actionRaw);
+  const result = await verifyRecaptchaEnterprise(token, actionRaw, {
+    referer: req.headers.get("referer"),
+    userAgent: req.headers.get("user-agent"),
+  });
   if (!result.ok) {
     return NextResponse.json({ ok: false }, { status: 403 });
   }

@@ -1,4 +1,12 @@
-import { getRecaptchaSiteKey } from "@/lib/recaptcha/config";
+import {
+  getRecaptchaApiKey,
+  getRecaptchaProjectId,
+  getRecaptchaSiteKey,
+} from "@/lib/recaptcha/config";
+import {
+  buildRecaptchaAssessmentHeaders,
+  type RecaptchaAssessmentRequestContext,
+} from "@/lib/recaptcha/verify";
 
 function trimEnv(key: string): string {
   return process.env[key]?.trim() ?? "";
@@ -12,27 +20,17 @@ function siteKeyForPublicLeadAssessment(): string {
   return getRecaptchaSiteKey() || trimEnv("RECAPTCHA_SITE_KEY");
 }
 
-/** Google Cloud API key for assessments?key= (RECAPTCHA_API_KEY preferred; RECAPTCHA_SECRET_KEY as alias). */
-function contactAssessmentApiKey(): string {
-  return trimEnv("RECAPTCHA_API_KEY") || trimEnv("RECAPTCHA_SECRET_KEY");
-}
-
 function contactRecaptchaServerReady(): boolean {
-  return !!(trimEnv("RECAPTCHA_PROJECT_ID") && contactAssessmentApiKey() && siteKeyForPublicLeadAssessment());
+  return !!(getRecaptchaProjectId() && getRecaptchaApiKey() && siteKeyForPublicLeadAssessment());
 }
-
-export type ContactRecaptchaRequestContext = {
-  referer?: string | null;
-  userAgent?: string | null;
-};
 
 /**
  * Public lead form: Enterprise REST CreateAssessment (checkbox tokens).
- * Forwards Referer/User-Agent when provided so Google Cloud API keys restricted by HTTP referrer can succeed.
+ * Uses same API key / project / header forwarding as `verifyRecaptchaEnterprise` (login, signup, etc.).
  */
 export async function verifyPublicLeadRecaptchaCheckboxToken(
   token: string | null | undefined,
-  requestContext?: ContactRecaptchaRequestContext,
+  requestContext?: RecaptchaAssessmentRequestContext,
 ): Promise<{ ok: true } | { ok: false; reason: "missing" | "invalid" | "upstream" | "misconfigured" }> {
   const publicKey = getRecaptchaSiteKey();
   if (!publicKey) {
@@ -51,24 +49,16 @@ export async function verifyPublicLeadRecaptchaCheckboxToken(
     return { ok: false, reason: "misconfigured" };
   }
 
-  const projectId = trimEnv("RECAPTCHA_PROJECT_ID");
-  const apiKey = contactAssessmentApiKey();
+  const projectId = getRecaptchaProjectId();
+  const apiKey = getRecaptchaApiKey();
   const siteKey = siteKeyForPublicLeadAssessment();
   const url = `https://recaptchaenterprise.googleapis.com/v1/projects/${encodeURIComponent(projectId)}/assessments?key=${encodeURIComponent(apiKey)}`;
-
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-  };
-  const ref = requestContext?.referer?.trim();
-  if (ref) headers.Referer = ref.slice(0, 2048);
-  const ua = requestContext?.userAgent?.trim();
-  if (ua) headers["User-Agent"] = ua.slice(0, 512);
 
   let res: Response;
   try {
     res = await fetch(url, {
       method: "POST",
-      headers,
+      headers: buildRecaptchaAssessmentHeaders(requestContext),
       body: JSON.stringify({
         event: {
           token: trimmed,

@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import type { RecaptchaAction } from "./actions";
 import { verifyRecaptchaEnterprise } from "./verify";
@@ -15,7 +16,11 @@ export async function assertRecaptchaFromFormData(
   redirectPath: string,
 ): Promise<void> {
   const token = String(formData.get("recaptcha_token") ?? "").trim();
-  const result = await verifyRecaptchaEnterprise(token, action);
+  const h = await headers();
+  const result = await verifyRecaptchaEnterprise(token, action, {
+    referer: h.get("referer"),
+    userAgent: h.get("user-agent"),
+  });
   if (!result.ok) {
     redirectError(
       redirectPath,

@@ -7,6 +7,25 @@ import {
   isRecaptchaVerificationEnabled,
 } from "./config";
 
+/** Forward browser headers so API keys restricted by HTTP referrer work from server-side fetch. */
+export type RecaptchaAssessmentRequestContext = {
+  referer?: string | null;
+  userAgent?: string | null;
+};
+
+export function buildRecaptchaAssessmentHeaders(
+  ctx?: RecaptchaAssessmentRequestContext,
+): Record<string, string> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  const ref = ctx?.referer?.trim();
+  if (ref) headers.Referer = ref.slice(0, 2048);
+  const ua = ctx?.userAgent?.trim();
+  if (ua) headers["User-Agent"] = ua.slice(0, 512);
+  return headers;
+}
+
 export type RecaptchaVerifyResult =
   | { ok: true; score: number }
   | { ok: false; reason: "missing_token" | "misconfigured" | "invalid" | "upstream" };
@@ -18,6 +37,7 @@ export type RecaptchaVerifyResult =
 export async function verifyRecaptchaEnterprise(
   token: string | null | undefined,
   expectedAction: RecaptchaAction,
+  requestContext?: RecaptchaAssessmentRequestContext,
 ): Promise<RecaptchaVerifyResult> {
   if (!isRecaptchaVerificationEnabled()) {
     return { ok: true, score: 1 };
@@ -41,7 +61,7 @@ export async function verifyRecaptchaEnterprise(
   try {
     res = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: buildRecaptchaAssessmentHeaders(requestContext),
       body: JSON.stringify({
         event: {
           token: trimmed,
@@ -59,9 +79,15 @@ export async function verifyRecaptchaEnterprise(
   }
 
   if (!res.ok) {
-    if (process.env.NODE_ENV === "development") {
-      console.warn("[recaptcha] assessment HTTP", res.status);
+    const errText = await res.text().catch(() => "");
+    let errMsg = "";
+    try {
+      const j = JSON.parse(errText) as { error?: { message?: string } };
+      errMsg = j.error?.message ?? "";
+    } catch {
+      errMsg = errText.slice(0, 200);
     }
+    console.warn("[recaptcha] assessment HTTP", expectedAction, res.status, errMsg || "(no body)");
     return { ok: false, reason: "upstream" };
   }
 
