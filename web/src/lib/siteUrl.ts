@@ -71,10 +71,15 @@ export function getSignupEmailRedirectUrl(): string {
   return `${base}/auth/callback?next=${encodeURIComponent("/portal/dashboard")}`;
 }
 
-/** Full URL passed to `resetPasswordForEmail` → `redirectTo` (password recovery). */
+/**
+ * Full URL passed to `resetPasswordForEmail` → `redirectTo` (password recovery).
+ *
+ * Must be a page route (not `/auth/callback`): Supabase often returns tokens in the URL
+ * **hash**, which never reaches the server — `/portal/reset-password` handles them on the client.
+ */
 export function getPasswordRecoveryRedirectUrl(): string {
   const base = getSiteBaseUrl();
-  return `${base}/auth/callback?next=${encodeURIComponent("/portal/reset-password")}`;
+  return `${base}/portal/reset-password`;
 }
 
 /** Full URL for OAuth `signInWithOAuth` callback; `next` is a path (e.g. `/portal/dashboard`). */

@@ -6,6 +6,54 @@ import { useRouter } from "next/navigation";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
 
+function stripRecoveryParamsFromUrl() {
+  if (typeof window === "undefined") return;
+  // Drop hash (tokens) and ?code= after establishing the session
+  window.history.replaceState(null, "", window.location.pathname);
+}
+
+/**
+ * Supabase recovery links may use PKCE (`?code=`) or implicit-style (`#access_token=&refresh_token=`).
+ * Hash fragments are invisible to the server, so recovery must be finalized here (not in `/auth/callback`).
+ */
+async function establishRecoverySession(): Promise<{ ok: true } | { ok: false; message: string }> {
+  let supabase;
+  try {
+    supabase = createBrowserSupabaseClient();
+  } catch (e) {
+    return { ok: false, message: describeSupabaseAuthError(e) };
+  }
+
+  const search = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
+  const code = search.get("code");
+  if (code) {
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) return { ok: false, message: error.message };
+    stripRecoveryParamsFromUrl();
+    return { ok: true };
+  }
+
+  const rawHash = typeof window !== "undefined" ? window.location.hash : "";
+  const hash = rawHash.startsWith("#") ? rawHash.slice(1) : rawHash;
+  const params = new URLSearchParams(hash);
+  const access_token = params.get("access_token");
+  const refresh_token = params.get("refresh_token");
+  if (access_token && refresh_token) {
+    const { error } = await supabase.auth.setSession({ access_token, refresh_token });
+    if (error) return { ok: false, message: error.message };
+    stripRecoveryParamsFromUrl();
+    return { ok: true };
+  }
+
+  const { data } = await supabase.auth.getSession();
+  if (data.session) return { ok: true };
+
+  return {
+    ok: false,
+    message: "Lien invalide ou expiré. Demandez un nouveau lien de réinitialisation.",
+  };
+}
+
 export function ResetPasswordForm() {
   const router = useRouter();
   const [password, setPassword] = useState("");
@@ -17,12 +65,18 @@ export function ResetPasswordForm() {
 
   useEffect(() => {
     void (async () => {
+      setError(null);
       try {
-        const supabase = createBrowserSupabaseClient();
-        const { data } = await supabase.auth.getSession();
-        setHasSession(!!data.session);
-      } catch {
+        const recovered = await establishRecoverySession();
+        if (recovered.ok) {
+          setHasSession(true);
+        } else {
+          setHasSession(false);
+          setError(recovered.message);
+        }
+      } catch (e) {
         setHasSession(false);
+        setError(describeSupabaseAuthError(e));
       } finally {
         setSessionChecked(true);
       }
@@ -48,6 +102,7 @@ export function ResetPasswordForm() {
         setError(uErr.message);
         return;
       }
+      setError(null);
       await supabase.auth.signOut();
       router.push("/portal/login?success=password_reset");
       router.refresh();
@@ -67,9 +122,13 @@ export function ResetPasswordForm() {
   if (!hasSession) {
     return (
       <div className="mx-auto max-w-md space-y-4 rounded-2xl border border-bcp-border bg-white p-8 text-center shadow-sm">
-        <p className="text-sm text-bcp-muted">
-          Ce lien est invalide ou a expiré. Demandez un nouveau lien de réinitialisation.
-        </p>
+        {error ? (
+          <p className="text-sm text-red-600">{error}</p>
+        ) : (
+          <p className="text-sm text-bcp-muted">
+            Ce lien est invalide ou a expiré. Demandez un nouveau lien de réinitialisation.
+          </p>
+        )}
         <Link href="/portal/forgot-password" className="text-sm font-medium text-bcp-anthracite underline">
           Mot de passe oublié
         </Link>
