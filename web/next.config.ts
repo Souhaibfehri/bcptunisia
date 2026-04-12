@@ -16,7 +16,6 @@ function supabaseStorageHostname(): string | undefined {
 const supabaseHost = supabaseStorageHostname();
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["@google-cloud/recaptcha-enterprise"],
   /** Lets IDE / Simple Browser / tunnel hosts load `/_next/*` in dev without 403. */
   allowedDevOrigins: [
     "127.0.0.1",

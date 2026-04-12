@@ -1,12 +1,5 @@
-import { RecaptchaEnterpriseServiceClient } from "@google-cloud/recaptcha-enterprise";
+import { getRecaptchaApiKey, getRecaptchaProjectId } from "@/lib/recaptcha/config";
 import { PUBLIC_LEAD_RECAPTCHA_ACTION } from "@/lib/recaptcha/publicLeadRecaptchaAction";
-
-let client: RecaptchaEnterpriseServiceClient | null = null;
-
-function getClient(): RecaptchaEnterpriseServiceClient {
-  if (!client) client = new RecaptchaEnterpriseServiceClient();
-  return client;
-}
 
 function trimEnv(key: string): string {
   return process.env[key]?.trim() ?? "";
@@ -16,13 +9,14 @@ function serverSiteKey(): string {
   return trimEnv("RECAPTCHA_SITE_KEY") || trimEnv("NEXT_PUBLIC_RECAPTCHA_SITE_KEY");
 }
 
-function hasGoogleApplicationCredentials(): boolean {
-  return !!(trimEnv("GOOGLE_APPLICATION_CREDENTIALS") || trimEnv("GOOGLE_CLOUD_KEY_FILE"));
+function contactRecaptchaServerReady(): boolean {
+  return !!(getRecaptchaProjectId() && getRecaptchaApiKey() && serverSiteKey());
 }
 
 /**
- * When `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` is set, the public lead form must pass a token and server must verify.
- * When unset (local dev), verification is skipped.
+ * When NEXT_PUBLIC_RECAPTCHA_SITE_KEY is set, the lead form must send a token; server verifies via Enterprise REST assessments (same as verify.ts).
+ * Uses RECAPTCHA_SECRET_KEY or RECAPTCHA_API_KEY as the assessments URL query key. Skips when public site key unset.
+ * Checkbox: no minimum score; only token validity and optional action match.
  */
 export async function verifyPublicLeadRecaptchaCheckboxToken(
   token: string | null | undefined,
@@ -37,53 +31,68 @@ export async function verifyPublicLeadRecaptchaCheckboxToken(
     return { ok: false, reason: "missing" };
   }
 
-  const projectId = trimEnv("RECAPTCHA_PROJECT_ID");
-  const siteKey = serverSiteKey();
-  if (!projectId || !siteKey || !hasGoogleApplicationCredentials()) {
+  if (!contactRecaptchaServerReady()) {
     if (process.env.NODE_ENV === "development") {
       console.warn(
-        "[recaptcha/contact] missing server config (RECAPTCHA_PROJECT_ID, RECAPTCHA_SITE_KEY or NEXT_PUBLIC_*, GOOGLE_APPLICATION_CREDENTIALS)",
+        "[recaptcha/contact] missing server config (RECAPTCHA_PROJECT_ID, RECAPTCHA_SECRET_KEY or RECAPTCHA_API_KEY, RECAPTCHA_SITE_KEY or NEXT_PUBLIC_RECAPTCHA_SITE_KEY)",
       );
     }
     return { ok: false, reason: "misconfigured" };
   }
 
+  const projectId = getRecaptchaProjectId();
+  const apiKey = getRecaptchaApiKey();
+  const siteKey = serverSiteKey();
+  const url = `https://recaptchaenterprise.googleapis.com/v1/projects/${encodeURIComponent(projectId)}/assessments?key=${encodeURIComponent(apiKey)}`;
+
+  let res: Response;
   try {
-    const c = getClient();
-    const parent = `projects/${projectId}`;
-    const [assessment] = await c.createAssessment({
-      parent,
-      assessment: {
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         event: {
           token: trimmed,
           siteKey,
           expectedAction: PUBLIC_LEAD_RECAPTCHA_ACTION,
         },
-      },
+      }),
+      cache: "no-store",
     });
-
-    const valid = assessment.tokenProperties?.valid === true;
-    const action = assessment.tokenProperties?.action;
-
-    if (!valid) {
-      if (process.env.NODE_ENV === "development") {
-        console.warn("[recaptcha/contact] invalid", assessment.tokenProperties?.invalidReason ?? "");
-      }
-      return { ok: false, reason: "invalid" };
-    }
-
-    if (action && action !== PUBLIC_LEAD_RECAPTCHA_ACTION) {
-      if (process.env.NODE_ENV === "development") {
-        console.warn("[recaptcha/contact] action mismatch", { expected: PUBLIC_LEAD_RECAPTCHA_ACTION, got: action });
-      }
-      return { ok: false, reason: "invalid" };
-    }
-
-    return { ok: true };
   } catch (e) {
     if (process.env.NODE_ENV === "development") {
-      console.warn("[recaptcha/contact] upstream", e instanceof Error ? e.message : "unknown");
+      console.warn("[recaptcha/contact] network", e instanceof Error ? e.message : "unknown");
     }
     return { ok: false, reason: "upstream" };
   }
+
+  if (!res.ok) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn("[recaptcha/contact] assessment HTTP", res.status);
+    }
+    return { ok: false, reason: "upstream" };
+  }
+
+  const data = (await res.json()) as {
+    tokenProperties?: { valid?: boolean; action?: string; invalidReason?: string };
+  };
+
+  const valid = data.tokenProperties?.valid === true;
+  const action = data.tokenProperties?.action;
+
+  if (!valid) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn("[recaptcha/contact] invalid", data.tokenProperties?.invalidReason ?? "");
+    }
+    return { ok: false, reason: "invalid" };
+  }
+
+  if (action && action !== PUBLIC_LEAD_RECAPTCHA_ACTION) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn("[recaptcha/contact] action mismatch", { expected: PUBLIC_LEAD_RECAPTCHA_ACTION, got: action });
+    }
+    return { ok: false, reason: "invalid" };
+  }
+
+  return { ok: true };
 }
