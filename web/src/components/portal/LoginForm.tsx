@@ -4,11 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
-import { getOAuthRedirectUrl } from "@/lib/siteUrl";
+import type { AppLocale } from "@/lib/appLocale";
+import { getOAuthRedirectUrl } from "@/lib/publicSite";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
 import { buttonClass } from "@/components/ui/button-variants";
 
-export function LoginForm() {
+export function LoginForm({ locale }: { locale: AppLocale }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/portal/dashboard";
@@ -26,7 +27,7 @@ export function LoginForm() {
       const { error: oErr } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: getOAuthRedirectUrl(next),
+          redirectTo: getOAuthRedirectUrl(next, locale),
         },
       });
       if (oErr) setError(oErr.message);
@@ -135,11 +136,17 @@ export function LoginForm() {
         </button>
       </form>
       <p className="text-center text-xs text-bcp-muted">
-        <Link href="/portal/forgot-password" className="underline hover:text-bcp-anthracite">
+        <Link
+          href={`/portal/forgot-password?locale=${encodeURIComponent(locale)}`}
+          className="underline hover:text-bcp-anthracite"
+        >
           Mot de passe oublié
         </Link>
         {" · "}
-        <Link href="/portal/signup" className="underline hover:text-bcp-anthracite">
+        <Link
+          href={`/portal/signup?locale=${encodeURIComponent(locale)}`}
+          className="underline hover:text-bcp-anthracite"
+        >
           Créer un compte
         </Link>
       </p>

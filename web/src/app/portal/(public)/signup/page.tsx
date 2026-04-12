@@ -1,11 +1,17 @@
 import { PortalHeader } from "@/components/portal/PortalHeader";
 import { SignupForm } from "@/components/portal/SignupForm";
+import { parseAppLocale } from "@/lib/appLocale";
 
 export const metadata = {
   title: "Inscription — Espace client",
 };
 
-export default function PortalSignupPage() {
+type PageProps = { searchParams: Promise<{ locale?: string }> };
+
+export default async function PortalSignupPage({ searchParams }: PageProps) {
+  const sp = await searchParams;
+  const locale = parseAppLocale(sp.locale);
+
   return (
     <>
       <PortalHeader showSignOut={false} showAdminLink={false} />
@@ -17,7 +23,7 @@ export default function PortalSignupPage() {
           </p>
         </div>
         <div className="mt-10">
-          <SignupForm />
+          <SignupForm locale={locale} />
         </div>
       </main>
     </>

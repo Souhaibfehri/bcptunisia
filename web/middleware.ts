@@ -12,7 +12,8 @@ function isSupabaseAppPath(pathname: string) {
     pathname.startsWith("/admin") ||
     pathname.startsWith("/auth") ||
     pathname.startsWith("/dashboard") ||
-    pathname.startsWith("/employee")
+    pathname.startsWith("/employee") ||
+    /^\/(fr|en|ar)\/(auth|portal)(\/|$)/.test(pathname)
   );
 }
 

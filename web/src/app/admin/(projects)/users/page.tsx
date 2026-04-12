@@ -60,6 +60,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
       <section className="rounded-2xl border border-bcp-border bg-white p-6 shadow-sm">
         <h2 className="text-sm font-semibold uppercase tracking-wider text-bcp-muted">Inviter un utilisateur</h2>
         <form action={inviteUser} className="mt-4 flex flex-wrap items-end gap-3">
+          <input type="hidden" name="redirect_to" value="/admin/users" />
           <div className="min-w-[200px] flex-1">
             <label className="text-xs font-medium text-bcp-muted">E-mail</label>
             <input name="email" type="email" required placeholder="email@exemple.com" className="mt-1 w-full rounded-lg border border-bcp-border px-3 py-2 text-sm" />
@@ -88,8 +89,16 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
               ))}
             </select>
           </div>
+          <div>
+            <label className="text-xs font-medium text-bcp-muted">Langue du lien (e-mail)</label>
+            <select name="auth_locale" defaultValue="fr" className="mt-1 w-full rounded-lg border border-bcp-border px-2 py-2 text-sm">
+              <option value="fr">FR</option>
+              <option value="en">EN</option>
+              <option value="ar">AR</option>
+            </select>
+          </div>
           <button type="submit" className="rounded-full bg-gradient-gold px-5 py-2 text-xs font-semibold text-bcp-anthracite shadow-sm">
-            Envoyer l'invitation
+            Envoyer l&apos;invitation
           </button>
         </form>
       </section>

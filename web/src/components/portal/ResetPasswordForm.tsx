@@ -2,21 +2,24 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
+import { parseAppLocale } from "@/lib/appLocale";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
 
-function stripRecoveryParamsFromUrl() {
+function stripRecoveryParamsFromUrl(locale: string | null) {
   if (typeof window === "undefined") return;
-  // Drop hash (tokens) and ?code= after establishing the session
-  window.history.replaceState(null, "", window.location.pathname);
+  const u = new URL(window.location.href);
+  const clean = new URL(`${u.origin}/portal/reset-password`);
+  if (locale) clean.searchParams.set("locale", locale);
+  window.history.replaceState(null, "", clean.pathname + clean.search);
 }
 
 /**
  * Supabase recovery links may use PKCE (`?code=`) or implicit-style (`#access_token=&refresh_token=`).
  * Hash fragments are invisible to the server, so recovery must be finalized here (not in `/auth/callback`).
  */
-async function establishRecoverySession(): Promise<{ ok: true } | { ok: false; message: string }> {
+async function establishRecoverySession(locale: string | null): Promise<{ ok: true } | { ok: false; message: string }> {
   let supabase;
   try {
     supabase = createBrowserSupabaseClient();
@@ -29,7 +32,7 @@ async function establishRecoverySession(): Promise<{ ok: true } | { ok: false; m
   if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (error) return { ok: false, message: error.message };
-    stripRecoveryParamsFromUrl();
+    stripRecoveryParamsFromUrl(locale);
     return { ok: true };
   }
 
@@ -41,7 +44,7 @@ async function establishRecoverySession(): Promise<{ ok: true } | { ok: false; m
   if (access_token && refresh_token) {
     const { error } = await supabase.auth.setSession({ access_token, refresh_token });
     if (error) return { ok: false, message: error.message };
-    stripRecoveryParamsFromUrl();
+    stripRecoveryParamsFromUrl(locale);
     return { ok: true };
   }
 
@@ -56,6 +59,9 @@ async function establishRecoverySession(): Promise<{ ok: true } | { ok: false; m
 
 export function ResetPasswordForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const localeParam = searchParams.get("locale");
+  const locale = parseAppLocale(localeParam);
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -67,7 +73,7 @@ export function ResetPasswordForm() {
     void (async () => {
       setError(null);
       try {
-        const recovered = await establishRecoverySession();
+        const recovered = await establishRecoverySession(localeParam);
         if (recovered.ok) {
           setHasSession(true);
         } else {
@@ -81,7 +87,7 @@ export function ResetPasswordForm() {
         setSessionChecked(true);
       }
     })();
-  }, []);
+  }, [localeParam]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -104,7 +110,7 @@ export function ResetPasswordForm() {
       }
       setError(null);
       await supabase.auth.signOut();
-      router.push("/portal/login?success=password_reset");
+      router.push(`/portal/login?locale=${encodeURIComponent(locale)}&success=password_reset`);
       router.refresh();
     } catch (err) {
       setError(describeSupabaseAuthError(err));
@@ -129,7 +135,10 @@ export function ResetPasswordForm() {
             Ce lien est invalide ou a expiré. Demandez un nouveau lien de réinitialisation.
           </p>
         )}
-        <Link href="/portal/forgot-password" className="text-sm font-medium text-bcp-anthracite underline">
+        <Link
+          href={`/portal/forgot-password?locale=${encodeURIComponent(locale)}`}
+          className="text-sm font-medium text-bcp-anthracite underline"
+        >
           Mot de passe oublié
         </Link>
       </div>

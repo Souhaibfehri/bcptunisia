@@ -3,10 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
-import { getSignupEmailRedirectUrl } from "@/lib/siteUrl";
+import type { AppLocale } from "@/lib/appLocale";
+import { getLocalizedSignupEmailRedirectUrl } from "@/lib/publicSite";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
 
-export function SignupForm() {
+export function SignupForm({ locale }: { locale: AppLocale }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -31,7 +32,7 @@ export function SignupForm() {
         email,
         password,
         options: {
-          emailRedirectTo: getSignupEmailRedirectUrl(),
+          emailRedirectTo: getLocalizedSignupEmailRedirectUrl(locale),
           data: { full_name: displayName },
         },
       });
@@ -106,7 +107,10 @@ export function SignupForm() {
         </button>
       </form>
       <p className="text-center text-xs text-bcp-muted">
-        <Link href="/portal/login" className="underline hover:text-bcp-anthracite">
+        <Link
+          href={`/portal/login?locale=${encodeURIComponent(locale)}`}
+          className="underline hover:text-bcp-anthracite"
+        >
           Déjà un compte ? Se connecter
         </Link>
       </p>

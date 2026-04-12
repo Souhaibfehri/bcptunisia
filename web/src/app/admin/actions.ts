@@ -3,6 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createServerSupabaseClient, createServiceRoleClient } from "@/lib/supabase/server";
+import { parseAppLocale } from "@/lib/appLocale";
+import { getLocalizedAuthCallbackUrl } from "@/lib/serverPublicSite";
 import { fetchInternalProjectMemberUserIds, notifyUsers } from "@/lib/notifications/server";
 
 /** Full admin: super_admin / admin only — for user, client, and global management */
@@ -187,14 +189,24 @@ export async function inviteUser(formData: FormData) {
   const role = String(formData.get("role") ?? "client").trim();
   const clientId = String(formData.get("client_id") ?? "").trim() || null;
   const redirectTo = String(formData.get("redirect_to") ?? "/admin/users").trim();
+  const authLocale = parseAppLocale(String(formData.get("auth_locale") ?? "").trim() || null);
 
   if (!email) redirectError(redirectTo, "E-mail requis");
 
   await requireFullAdmin();
   const admin = createServiceRoleClient();
 
+  const inviteRedirectTo = await getLocalizedAuthCallbackUrl(authLocale, "/portal/dashboard");
+  if (!/^https?:\/\//i.test(inviteRedirectTo)) {
+    redirectError(
+      redirectTo,
+      "URL publique manquante : définissez NEXT_PUBLIC_APP_URL (ou NEXT_PUBLIC_SITE_URL) sur le serveur.",
+    );
+  }
+
   const { data: inviteData, error: invErr } = await admin.auth.admin.inviteUserByEmail(email, {
     data: { full_name: displayName ?? undefined },
+    redirectTo: inviteRedirectTo,
   });
   if (invErr) redirectError(redirectTo, invErr.message);
 

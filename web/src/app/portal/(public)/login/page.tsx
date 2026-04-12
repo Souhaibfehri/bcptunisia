@@ -2,12 +2,18 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { LoginForm } from "@/components/portal/LoginForm";
 import { PortalHeader } from "@/components/portal/PortalHeader";
+import { parseAppLocale } from "@/lib/appLocale";
 
 export const metadata = {
   title: "Connexion — Espace client",
 };
 
-export default function PortalLoginPage() {
+type PageProps = { searchParams: Promise<{ locale?: string }> };
+
+export default async function PortalLoginPage({ searchParams }: PageProps) {
+  const sp = await searchParams;
+  const locale = parseAppLocale(sp.locale);
+
   return (
     <>
       <PortalHeader showSignOut={false} showAdminLink={false} />
@@ -22,7 +28,7 @@ export default function PortalLoginPage() {
           <Suspense
             fallback={<p className="text-center text-sm text-bcp-muted">Chargement…</p>}
           >
-            <LoginForm />
+            <LoginForm locale={locale} />
           </Suspense>
         </div>
         <p className="mt-8 text-center text-xs text-bcp-muted">

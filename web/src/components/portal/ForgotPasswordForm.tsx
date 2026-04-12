@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import type { AppLocale } from "@/lib/appLocale";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
 
-export function ForgotPasswordForm() {
+export function ForgotPasswordForm({ locale }: { locale: AppLocale }) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -19,7 +20,7 @@ export function ForgotPasswordForm() {
       const res = await fetch("/api/auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, locale }),
       });
       if (!res.ok) {
         const data = (await res.json().catch(() => null)) as { error?: string } | null;
@@ -66,7 +67,10 @@ export function ForgotPasswordForm() {
         </button>
       </form>
       <p className="text-center text-xs text-bcp-muted">
-        <Link href="/portal/login" className="underline hover:text-bcp-anthracite">
+        <Link
+          href={`/portal/login?locale=${encodeURIComponent(locale)}`}
+          className="underline hover:text-bcp-anthracite"
+        >
           Retour à la connexion
         </Link>
       </p>

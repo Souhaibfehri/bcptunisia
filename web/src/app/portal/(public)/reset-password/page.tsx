@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { PortalHeader } from "@/components/portal/PortalHeader";
 import { ResetPasswordForm } from "@/components/portal/ResetPasswordForm";
 
@@ -14,7 +15,11 @@ export default function ResetPasswordPage() {
           <h1 className="text-2xl font-semibold text-bcp-anthracite">Choisir un nouveau mot de passe</h1>
         </div>
         <div className="mt-10">
-          <ResetPasswordForm />
+          <Suspense
+            fallback={<p className="text-center text-sm text-bcp-muted">Chargement…</p>}
+          >
+            <ResetPasswordForm />
+          </Suspense>
         </div>
       </main>
     </>
