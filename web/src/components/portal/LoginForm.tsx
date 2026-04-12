@@ -5,9 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import type { AppLocale } from "@/lib/appLocale";
-import { getOAuthRedirectUrl } from "@/lib/publicSite";
 import { describeSupabaseAuthError } from "@/utils/supabase/auth-errors";
-import { buttonClass } from "@/components/ui/button-variants";
 import { verifyRecaptchaPreflightOnClient } from "@/lib/recaptcha/clientPreflight";
 
 export function LoginForm({ locale }: { locale: AppLocale }) {
@@ -19,25 +17,6 @@ export function LoginForm({ locale }: { locale: AppLocale }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  async function oauth(provider: "google" | "azure") {
-    setError(null);
-    setLoading(true);
-    try {
-      const supabase = createBrowserSupabaseClient();
-      const { error: oErr } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: getOAuthRedirectUrl(next, locale),
-        },
-      });
-      if (oErr) setError(oErr.message);
-    } catch (e) {
-      setError(describeSupabaseAuthError(e));
-    } finally {
-      setLoading(false);
-    }
-  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -72,32 +51,6 @@ export function LoginForm({ locale }: { locale: AppLocale }) {
 
   return (
     <div className="mx-auto max-w-md space-y-6 rounded-2xl border border-bcp-border/90 bg-gradient-to-b from-white to-bcp-cream/25 p-8 shadow-md">
-      <div className="flex flex-col gap-2">
-        <button
-          type="button"
-          disabled={loading}
-          onClick={() => oauth("google")}
-          className={buttonClass({ variant: "secondary", size: "lg", className: "w-full" })}
-        >
-          Continuer avec Google
-        </button>
-        <button
-          type="button"
-          disabled={loading}
-          onClick={() => oauth("azure")}
-          className={buttonClass({ variant: "secondary", size: "lg", className: "w-full" })}
-        >
-          Continuer avec Microsoft
-        </button>
-      </div>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t border-bcp-border" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase tracking-wider text-bcp-muted">
-          <span className="bg-white px-2">ou e-mail</span>
-        </div>
-      </div>
       <form onSubmit={onSubmit} className="space-y-4">
         {passwordResetOk ? (
           <p className="rounded-lg border border-emerald-200/80 bg-[var(--status-success-bg)] px-3 py-2 text-sm text-[var(--status-success-fg)]">
