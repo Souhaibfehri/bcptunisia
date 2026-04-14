@@ -32,6 +32,21 @@ const STATUS_LABEL: Record<string, string> = {
   terminated: "Sorti",
 };
 
+const STATUS_BADGE: Record<string, string> = {
+  active: "bg-emerald-50 text-emerald-900 ring-1 ring-emerald-200/80",
+  on_leave: "bg-sky-50 text-sky-900 ring-1 ring-sky-200/80",
+  probation: "bg-violet-50 text-violet-900 ring-1 ring-violet-200/80",
+  suspended: "bg-amber-50 text-amber-900 ring-1 ring-amber-200/80",
+  terminated: "bg-slate-100 text-slate-700 ring-1 ring-slate-200/80",
+};
+
+const PORTAL_BADGE: Record<string, string> = {
+  none: "bg-slate-50 text-slate-600 ring-1 ring-slate-200/80",
+  invite_pending: "bg-amber-50 text-amber-900 ring-1 ring-amber-200/80",
+  active: "bg-emerald-50 text-emerald-900 ring-1 ring-emerald-200/80",
+  disabled: "bg-red-50 text-red-800 ring-1 ring-red-200/70",
+};
+
 /** SQL treats NULL != 'active' as unknown, so plain .neq excludes NULL portal_status. */
 function applyNotActivePortalFilter<T extends { or: (s: string) => T }>(q: T): T {
   return q.or("portal_status.is.null,portal_status.neq.active");
@@ -154,21 +169,23 @@ export default async function HrEmployeesDirectoryPage({ searchParams }: SearchP
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-wrap items-start justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-4 rounded-2xl border border-bcp-border/70 bg-gradient-to-br from-white via-bcp-cream/25 to-bcp-navy/[0.04] p-6 shadow-sm">
         <div>
-          <h1 className="text-2xl font-semibold text-bcp-anthracite">Effectifs</h1>
-          <p className="mt-1 text-sm text-bcp-muted">Annuaire des employés — fiches avec ou sans accès portail.</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-bcp-navy">Effectifs</h1>
+          <p className="mt-1 max-w-xl text-sm text-bcp-muted">
+            Annuaire vivant des collaborateurs — statuts, portail et accès en un coup d&apos;œil.
+          </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Link
             href="/admin/hr/employees/new"
-            className="rounded-full bg-bcp-navy px-4 py-2 text-xs font-semibold text-white shadow-sm hover:opacity-95"
+            className="rounded-full bg-gradient-to-r from-bcp-navy to-bcp-anthracite px-5 py-2.5 text-xs font-semibold text-white shadow-md transition hover:shadow-lg hover:brightness-105"
           >
             Ajouter un employé
           </Link>
           <Link
             href="/admin/hr/employees?no_active_portal=1"
-            className="rounded-full border border-bcp-border bg-white px-4 py-2 text-xs font-semibold text-bcp-anthracite hover:bg-bcp-surface"
+            className="rounded-full border border-bcp-gold/40 bg-white/90 px-4 py-2.5 text-xs font-semibold text-bcp-anthracite shadow-sm transition hover:bg-bcp-gold/10"
           >
             Créer accès portail
           </Link>
@@ -179,25 +196,25 @@ export default async function HrEmployeesDirectoryPage({ searchParams }: SearchP
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
         {[
-          { label: "Total", value: totalCount ?? 0, href: "/admin/hr/employees" },
-          { label: "Actifs", value: activeCount ?? 0, href: "/admin/hr/employees?employment_status=active" },
-          { label: "Essai", value: probationCount ?? 0, href: "/admin/hr/employees?employment_status=probation" },
-          { label: "En congé", value: leaveCount ?? 0, href: "/admin/hr/employees?employment_status=on_leave" },
-          { label: "Sortis / susp.", value: exitedCount ?? 0, href: "/admin/hr/employees?exited=1" },
-          { label: "Sans accès actif", value: noPortalCount ?? 0, href: "/admin/hr/employees?no_active_portal=1" },
+          { label: "Total", value: totalCount ?? 0, href: "/admin/hr/employees", accent: "border-l-4 border-l-slate-400" },
+          { label: "Actifs", value: activeCount ?? 0, href: "/admin/hr/employees?employment_status=active", accent: "border-l-4 border-l-emerald-500" },
+          { label: "Essai", value: probationCount ?? 0, href: "/admin/hr/employees?employment_status=probation", accent: "border-l-4 border-l-violet-500" },
+          { label: "En congé", value: leaveCount ?? 0, href: "/admin/hr/employees?employment_status=on_leave", accent: "border-l-4 border-l-sky-500" },
+          { label: "Sortis / susp.", value: exitedCount ?? 0, href: "/admin/hr/employees?exited=1", accent: "border-l-4 border-l-amber-500" },
+          { label: "Sans accès actif", value: noPortalCount ?? 0, href: "/admin/hr/employees?no_active_portal=1", accent: "border-l-4 border-l-bcp-gold" },
         ].map((k) => (
           <Link
             key={k.label}
             href={k.href}
-            className="rounded-xl border border-bcp-border bg-white p-4 shadow-sm transition hover:border-bcp-navy/30"
+            className={`rounded-xl border border-bcp-border/90 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-bcp-navy/25 hover:shadow-md ${k.accent}`}
           >
-            <p className="text-2xl font-bold text-bcp-anthracite">{k.value}</p>
-            <p className="text-xs text-bcp-muted">{k.label}</p>
+            <p className="text-2xl font-bold text-bcp-navy">{k.value}</p>
+            <p className="text-xs font-medium text-bcp-muted">{k.label}</p>
           </Link>
         ))}
       </div>
 
-      <form className="flex flex-wrap items-end gap-3 rounded-2xl border border-bcp-border bg-white p-4 shadow-sm" method="get">
+      <form className="flex flex-wrap items-end gap-3 rounded-2xl border border-bcp-border/80 bg-white/95 p-4 shadow-sm ring-1 ring-bcp-navy/[0.04]" method="get">
         <div className="min-w-[10rem] flex-1">
           <label className="text-xs font-medium text-bcp-muted">Recherche</label>
           <input name="q" defaultValue={q} placeholder="Nom, e-mail, matricule…" className="mt-1 w-full rounded-lg border border-bcp-border px-3 py-2 text-sm" />
@@ -388,10 +405,10 @@ export default async function HrEmployeesDirectoryPage({ searchParams }: SearchP
         </form>
       </section>
 
-      <div className="overflow-hidden rounded-xl border border-bcp-border bg-white">
+      <div className="overflow-hidden rounded-xl border border-bcp-border/80 bg-white shadow-sm ring-1 ring-bcp-navy/[0.03]">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[960px] text-left text-sm">
-            <thead className="border-b border-bcp-border bg-bcp-cream/40 text-xs uppercase text-bcp-muted">
+            <thead className="border-b border-bcp-border bg-gradient-to-r from-bcp-navy/10 via-bcp-cream/50 to-bcp-gold/10 text-xs font-semibold uppercase tracking-wide text-bcp-navy/80">
               <tr>
                 <th className="px-4 py-3">Employé</th>
                 <th className="px-4 py-3">Matricule</th>
@@ -404,7 +421,7 @@ export default async function HrEmployeesDirectoryPage({ searchParams }: SearchP
                 <th className="px-4 py-3">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-bcp-border">
+            <tbody className="divide-y divide-bcp-border/80">
               {employees.map((e) => {
                 const pr = e.profiles
                   ? { email: e.profiles.email, display_name: e.profiles.display_name, role: e.profiles.role }
@@ -413,9 +430,9 @@ export default async function HrEmployeesDirectoryPage({ searchParams }: SearchP
                 const name = hrEmployeeDisplayName({ ...e, profiles: pr });
                 const portal = (e as { portal_status?: string | null }).portal_status ?? "none";
                 return (
-                  <tr key={e.id} className="hover:bg-bcp-surface/60">
+                  <tr key={e.id} className="transition hover:bg-gradient-to-r hover:from-bcp-gold/[0.06] hover:to-transparent">
                     <td className="px-4 py-3">
-                      <Link href={`/admin/hr/employees/${e.id}`} className="font-medium text-bcp-anthracite hover:text-bcp-navy">
+                      <Link href={`/admin/hr/employees/${e.id}`} className="font-semibold text-bcp-navy hover:text-bcp-gold">
                         {name}
                       </Link>
                       <p className="text-xs text-bcp-muted">{e.personal_email || pr?.email || e.work_email || "—"}</p>
@@ -426,12 +443,16 @@ export default async function HrEmployeesDirectoryPage({ searchParams }: SearchP
                     <td className="max-w-[8rem] truncate px-4 py-3 text-xs text-bcp-muted">{managerLabel(e.manager_user_id)}</td>
                     <td className="px-4 py-3 text-xs text-bcp-muted">{teamByEmployee.get(e.id) || "—"}</td>
                     <td className="px-4 py-3">
-                      <span className="rounded-full bg-bcp-surface px-2 py-0.5 text-xs font-medium text-bcp-anthracite">
+                      <span
+                        className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_BADGE[e.employment_status] ?? "bg-bcp-surface text-bcp-anthracite ring-1 ring-bcp-border"}`}
+                      >
                         {STATUS_LABEL[e.employment_status] ?? e.employment_status}
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="rounded-full bg-bcp-navy/5 px-2 py-0.5 text-xs font-medium text-bcp-navy">
+                      <span
+                        className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${PORTAL_BADGE[portal] ?? "bg-bcp-surface text-bcp-navy ring-1 ring-bcp-border"}`}
+                      >
                         {PORTAL_STATUS_LABEL[portal] ?? portal}
                       </span>
                     </td>

@@ -255,7 +255,7 @@ export default async function AdminUserDetailPage({ params, searchParams }: Page
               action={deleteUser}
               confirmLabel={`Tapez l'adresse e-mail de l'utilisateur pour confirmer : ${user.email}`}
               confirmPlaceholder={user.email ?? ""}
-              hiddenFields={{ user_id: user.id }}
+              hiddenFields={{ user_id: user.id, redirect_to: redirectTo }}
               triggerLabel="Supprimer cet utilisateur"
               triggerClassName="text-xs font-medium text-red-500 hover:text-red-700"
             />

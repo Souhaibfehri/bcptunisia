@@ -11,36 +11,44 @@ export default async function AdminHrLayout({ children }: { children: ReactNode 
     redirect("/admin");
   }
 
+  const pill =
+    "rounded-full px-3.5 py-1.5 text-sm font-medium text-bcp-anthracite/90 ring-1 ring-bcp-border/80 bg-white/90 shadow-sm transition hover:bg-gradient-to-r hover:from-bcp-gold/15 hover:to-amber-50/80 hover:ring-bcp-gold/40 hover:text-bcp-navy";
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center gap-3 border-b border-bcp-border pb-4">
-        <h2 className="text-lg font-semibold text-bcp-anthracite">Ressources humaines</h2>
-        <nav className="flex flex-wrap gap-2 text-sm">
-          <Link href="/admin/hr" className="rounded-full px-3 py-1 text-bcp-muted hover:bg-bcp-surface hover:text-bcp-anthracite">
-            Tableau de bord
-          </Link>
-          <Link href="/admin/hr/employees" className="rounded-full px-3 py-1 text-bcp-muted hover:bg-bcp-surface hover:text-bcp-anthracite">
-            Effectifs
-          </Link>
-          <Link href="/admin/hr/leave" className="rounded-full px-3 py-1 text-bcp-muted hover:bg-bcp-surface hover:text-bcp-anthracite">
-            Congés
-          </Link>
-          <Link href="/admin/hr/leave/calendar" className="rounded-full px-3 py-1 text-bcp-muted hover:bg-bcp-surface hover:text-bcp-anthracite">
-            Calendrier
-          </Link>
-          <Link href="/admin/hr/documents" className="rounded-full px-3 py-1 text-bcp-muted hover:bg-bcp-surface hover:text-bcp-anthracite">
-            Documents
-          </Link>
-          <Link href="/admin/hr/payroll" className="rounded-full px-3 py-1 text-bcp-muted hover:bg-bcp-surface hover:text-bcp-anthracite">
-            Bulletins
-          </Link>
-          <Link href="/admin/hr/assets" className="rounded-full px-3 py-1 text-bcp-muted hover:bg-bcp-surface hover:text-bcp-anthracite">
-            Matériel
-          </Link>
-          <Link href="/admin/hr/teams" className="rounded-full px-3 py-1 text-bcp-muted hover:bg-bcp-surface hover:text-bcp-anthracite">
-            Équipes
-          </Link>
-        </nav>
+      <div className="rounded-2xl border border-bcp-border/80 bg-gradient-to-r from-bcp-navy/[0.06] via-white to-bcp-gold/[0.08] p-4 shadow-sm">
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-lg font-semibold tracking-tight text-bcp-navy">Ressources humaines</h2>
+            <p className="mt-0.5 text-xs text-bcp-muted">Pilotage des équipes, congés et dossiers collaborateurs.</p>
+          </div>
+          <nav className="flex flex-wrap gap-2">
+            <Link href="/admin/hr" className={pill}>
+              Tableau de bord
+            </Link>
+            <Link href="/admin/hr/employees" className={pill}>
+              Effectifs
+            </Link>
+            <Link href="/admin/hr/leave" className={pill}>
+              Congés
+            </Link>
+            <Link href="/admin/hr/leave/calendar" className={pill}>
+              Calendrier
+            </Link>
+            <Link href="/admin/hr/documents" className={pill}>
+              Documents
+            </Link>
+            <Link href="/admin/hr/payroll" className={pill}>
+              Bulletins
+            </Link>
+            <Link href="/admin/hr/assets" className={pill}>
+              Matériel
+            </Link>
+            <Link href="/admin/hr/teams" className={pill}>
+              Équipes
+            </Link>
+          </nav>
+        </div>
       </div>
       {children}
     </div>

@@ -40,6 +40,7 @@ export function AdminFlashBanner({
     "user-created": "Utilisateur créé. Communiquez le mot de passe par un canal sécurisé.",
     balance: "Mouvement de solde congés enregistré.",
     "user-deleted": "Utilisateur supprimé.",
+    "employee-deleted": "Fiche RH supprimée.",
     "profile-updated": "Profil mis à jour.",
     unlinked: "Rattachement retiré.",
     "client-updated": "Client mis à jour.",

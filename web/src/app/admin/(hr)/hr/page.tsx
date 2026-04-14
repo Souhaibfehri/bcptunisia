@@ -66,33 +66,35 @@ export default async function AdminHrDashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-semibold text-bcp-anthracite">Tableau de bord RH</h1>
-        <p className="mt-1 text-sm text-bcp-muted">Vue synthétique : effectifs, congés, matériel et documents.</p>
+      <div className="rounded-2xl border border-bcp-border/70 bg-gradient-to-br from-white via-bcp-cream/20 to-bcp-navy/[0.05] p-6 shadow-sm">
+        <h1 className="text-2xl font-semibold tracking-tight text-bcp-navy">Tableau de bord RH</h1>
+        <p className="mt-1 max-w-2xl text-sm text-bcp-muted">
+          Vue synthétique : effectifs, congés, matériel et documents — repérez les priorités en un coup d&apos;œil.
+        </p>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {[
-          { n: headcount ?? 0, l: "Effectif total", h: "/admin/hr/employees" },
-          { n: activeCount ?? 0, l: "Actifs", h: "/admin/hr/employees?employment_status=active" },
-          { n: pendingLeave ?? 0, l: "Congés à traiter", h: "/admin/hr/leave" },
-          { n: assetsOut ?? 0, l: "Matériel sorti", h: "/admin/hr/assets" },
-          { n: noPortal ?? 0, l: "Sans portail actif", h: "/admin/hr/employees?no_active_portal=1" },
-          { n: docsExpiring ?? 0, l: "Docs exp. 30j", h: "/admin/hr/documents?tab=hr" },
+          { n: headcount ?? 0, l: "Effectif total", h: "/admin/hr/employees", a: "border-l-slate-400" },
+          { n: activeCount ?? 0, l: "Actifs", h: "/admin/hr/employees?employment_status=active", a: "border-l-emerald-500" },
+          { n: pendingLeave ?? 0, l: "Congés à traiter", h: "/admin/hr/leave", a: "border-l-amber-500" },
+          { n: assetsOut ?? 0, l: "Matériel sorti", h: "/admin/hr/assets", a: "border-l-violet-500" },
+          { n: noPortal ?? 0, l: "Sans portail actif", h: "/admin/hr/employees?no_active_portal=1", a: "border-l-sky-500" },
+          { n: docsExpiring ?? 0, l: "Docs exp. 30j", h: "/admin/hr/documents?tab=hr", a: "border-l-bcp-gold" },
         ].map((k) => (
           <Link
             key={k.l}
             href={k.h}
-            className="rounded-xl border border-bcp-border bg-white p-4 shadow-sm transition hover:border-bcp-navy/25"
+            className={`rounded-xl border border-bcp-border/90 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md border-l-4 ${k.a}`}
           >
-            <p className="text-2xl font-bold text-bcp-anthracite">{k.n}</p>
-            <p className="text-xs text-bcp-muted">{k.l}</p>
+            <p className="text-2xl font-bold text-bcp-navy">{k.n}</p>
+            <p className="text-xs font-medium text-bcp-muted">{k.l}</p>
           </Link>
         ))}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section className="rounded-2xl border border-bcp-border bg-white p-6 shadow-sm">
+        <section className="rounded-2xl border border-bcp-border/80 bg-white p-6 shadow-sm ring-1 ring-bcp-navy/[0.03]">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-bcp-muted">Effectif par service</h2>
           {deptTop.length === 0 ? (
             <p className="mt-4 text-sm text-bcp-muted">Aucune répartition (services non renseignés).</p>
@@ -108,7 +110,7 @@ export default async function AdminHrDashboardPage() {
           )}
         </section>
 
-        <section className="rounded-2xl border border-bcp-border bg-white p-6 shadow-sm">
+        <section className="rounded-2xl border border-bcp-border/80 bg-white p-6 shadow-sm ring-1 ring-bcp-gold/10">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-bcp-muted">Embauches récentes</h2>
           <ul className="mt-4 space-y-2">
             {(recentHires ?? []).map((e) => (
@@ -129,9 +131,9 @@ export default async function AdminHrDashboardPage() {
         </section>
       </div>
 
-      <section className="rounded-2xl border border-bcp-border bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-bcp-border/80 bg-gradient-to-br from-white to-sky-50/40 p-6 shadow-sm ring-1 ring-sky-100/60">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-bcp-muted">Congés récents</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-bcp-navy/70">Congés récents</h2>
           <Link href="/admin/hr/leave" className="text-xs font-semibold text-bcp-navy hover:underline">
             File RH →
           </Link>
@@ -157,7 +159,9 @@ export default async function AdminHrDashboardPage() {
                       {lt?.label} · {r.starts_on} → {r.ends_on}
                     </span>
                   </div>
-                  <span className="rounded-full bg-bcp-surface px-2 py-0.5 text-xs font-medium text-bcp-anthracite">{r.status}</span>
+                  <span className="rounded-full bg-white/90 px-2.5 py-0.5 text-xs font-semibold capitalize text-sky-900 ring-1 ring-sky-200/80">
+                    {r.status}
+                  </span>
                 </li>
               );
             })}

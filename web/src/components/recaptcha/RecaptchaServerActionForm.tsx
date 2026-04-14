@@ -5,9 +5,20 @@ import type { RecaptchaAction } from "@/lib/recaptcha/actions";
 import {
   EnterpriseRecaptchaCheckbox,
   readEnterpriseCheckboxToken,
+  resetEnterpriseCheckbox,
 } from "@/components/recaptcha/EnterpriseRecaptchaCheckbox";
 
 type ServerAction = (formData: FormData) => Promise<void>;
+
+function isNextRedirect(e: unknown): boolean {
+  return (
+    typeof e === "object" &&
+    e !== null &&
+    "digest" in e &&
+    typeof (e as { digest: unknown }).digest === "string" &&
+    String((e as { digest: string }).digest).startsWith("NEXT_REDIRECT")
+  );
+}
 
 export function RecaptchaServerActionForm({
   action,
@@ -24,9 +35,15 @@ export function RecaptchaServerActionForm({
 }) {
   void _recaptchaAction; // prop documents intent; token is verified server-side with the action from each action handler
   const widgetIdRef = useRef<number | null>(null);
+  const [captchaKey, setCaptchaKey] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
+
+  function bumpCaptcha() {
+    resetEnterpriseCheckbox(widgetIdRef.current);
+    setCaptchaKey((k) => k + 1);
+  }
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -38,11 +55,18 @@ export function RecaptchaServerActionForm({
         const token = readEnterpriseCheckboxToken(widgetIdRef.current);
         if (!token) {
           setError("Vérification de sécurité échouée. Réessayez.");
+          bumpCaptcha();
           return;
         }
         fd.set("recaptcha_token", token);
       }
-      await action(fd);
+      try {
+        await action(fd);
+      } catch (err) {
+        if (isNextRedirect(err)) throw err;
+        setError("Une erreur est survenue. Réessayez.");
+        bumpCaptcha();
+      }
     });
   }
 
@@ -57,7 +81,7 @@ export function RecaptchaServerActionForm({
         </p>
       ) : null}
       {siteKey ? (
-        <div className="w-full basis-full">
+        <div key={captchaKey} className="w-full basis-full">
           <EnterpriseRecaptchaCheckbox siteKey={siteKey} widgetIdRef={widgetIdRef} className="mb-2" />
         </div>
       ) : null}

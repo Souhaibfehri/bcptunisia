@@ -15,7 +15,9 @@ import {
   setHrPortalInvitePending,
   disableHrEmployeePortal,
   adjustHrLeaveBalance,
+  deleteHrEmployeeDossier,
 } from "@/app/admin/(hr)/hr/actions";
+import { ConfirmDeleteModal } from "@/components/admin/ConfirmDeleteModal";
 import { embedOne } from "@/lib/supabase/embed";
 import { hrEmployeeDisplayName, PORTAL_STATUS_LABEL } from "@/lib/hr/display";
 
@@ -47,12 +49,15 @@ export default async function HrEmployeeDetailPage({ params, searchParams }: Pag
 
   const { data: byId, error: idErr } = await supabase.from("hr_employees").select("*").eq("id", param).maybeSingle();
 
-  let empBase = byId;
-  if (idErr || !empBase) {
-    const { data: byUser } = await supabase.from("hr_employees").select("*").eq("user_id", param).maybeSingle();
-    if (byUser?.id) redirect(`/admin/hr/employees/${byUser.id}`);
-    notFound();
-  }
+  const empBase =
+    !idErr && byId
+      ? byId
+      : await (async () => {
+          const { data: byUser } = await supabase.from("hr_employees").select("*").eq("user_id", param).maybeSingle();
+          if (byUser?.id) redirect(`/admin/hr/employees/${byUser.id}`);
+          return null;
+        })();
+  if (!empBase) notFound();
 
   const employeeId = empBase.id as string;
   const linkedUserId = empBase.user_id as string | null;
@@ -201,6 +206,12 @@ export default async function HrEmployeeDetailPage({ params, searchParams }: Pag
 
   const pendingLeave = (leaveRows ?? []).filter((r) => r.status === "pending").length;
 
+  const deleteConfirmTarget =
+    (prof?.email && prof.email.trim()) ||
+    String((emp as { personal_email?: string }).personal_email ?? "").trim() ||
+    String(emp.work_email ?? "").trim() ||
+    "";
+
   return (
     <div className="space-y-6">
       <div>
@@ -252,6 +263,7 @@ export default async function HrEmployeeDetailPage({ params, searchParams }: Pag
       <AdminFlashBanner error={sp.error} success={sp.success} />
 
       {tab === "overview" && (
+        <>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <div className="rounded-xl border border-bcp-border bg-white p-4 shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wider text-bcp-muted">Congés</p>
@@ -311,6 +323,39 @@ export default async function HrEmployeeDetailPage({ params, searchParams }: Pag
             </p>
           )}
         </div>
+
+        {deleteConfirmTarget ? (
+          <section className="rounded-2xl border border-red-200/80 bg-gradient-to-br from-red-50/90 to-amber-50/40 p-6 shadow-sm">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-red-800">Zone sensible</h2>
+            <p className="mt-2 max-w-2xl text-sm text-red-900/80">
+              Supprime définitivement la fiche RH et les données associées (congés, documents RH, matériel attribué dans
+              cette fiche, etc.).{" "}
+              {linkedUserId ? (
+                <span className="font-medium">
+                  Le compte plateforme (connexion) reste actif : pour le retirer aussi, utilisez la suppression
+                  utilisateur depuis Admin → Utilisateurs.
+                </span>
+              ) : null}
+            </p>
+            <div className="mt-4">
+              <ConfirmDeleteModal
+                action={deleteHrEmployeeDossier}
+                confirmLabel={`Pour confirmer, saisissez exactement : ${deleteConfirmTarget}`}
+                confirmPlaceholder={deleteConfirmTarget}
+                hiddenFields={{ employee_id: employeeId }}
+                triggerLabel="Supprimer la fiche RH"
+                triggerClassName="rounded-lg border border-red-300 bg-white px-4 py-2 text-sm font-semibold text-red-700 shadow-sm hover:bg-red-50"
+                buttonText="Supprimer la fiche"
+              />
+            </div>
+          </section>
+        ) : (
+          <section className="rounded-xl border border-amber-200 bg-amber-50/60 p-4 text-sm text-amber-900">
+            Ajoutez un e-mail (personnel, professionnel ou profil lié) sur la fiche pour pouvoir confirmer une
+            suppression.
+          </section>
+        )}
+        </>
       )}
 
       {tab === "personal" && (

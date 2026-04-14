@@ -296,6 +296,55 @@ export async function disableHrEmployeePortal(formData: FormData) {
   redirect(`/admin/hr/employees/${employeeId}?success=disabled`);
 }
 
+/**
+ * Deletes the HR dossier (cascade removes congés, documents RH liés, etc.).
+ * Confirmation must match one of: profil e-mail, e-mail personnel ou e-mail pro de la fiche.
+ * Ne supprime pas le compte Auth — utiliser la suppression utilisateur côté admin complet pour cela.
+ */
+export async function deleteHrEmployeeDossier(formData: FormData) {
+  const { supabase } = await requireHrSession();
+  const employeeId = String(formData.get("employee_id") ?? "").trim();
+  const confirmEmail = String(formData.get("confirm_email") ?? "").trim().toLowerCase();
+  if (!employeeId || !confirmEmail) {
+    redirect("/admin/hr/employees?error=Confirmation+requise");
+  }
+
+  const { data: emp, error: empErr } = await supabase
+    .from("hr_employees")
+    .select("id, user_id, personal_email, work_email")
+    .eq("id", employeeId)
+    .maybeSingle();
+  if (empErr || !emp) {
+    redirect("/admin/hr/employees?error=Fiche+introuvable");
+  }
+
+  const allowed = new Set<string>();
+  const pe = String(emp.personal_email ?? "").trim().toLowerCase();
+  const we = String(emp.work_email ?? "").trim().toLowerCase();
+  if (pe) allowed.add(pe);
+  if (we) allowed.add(we);
+  if (emp.user_id) {
+    const { data: prof } = await supabase.from("profiles").select("email").eq("id", emp.user_id).maybeSingle();
+    const em = String(prof?.email ?? "").trim().toLowerCase();
+    if (em) allowed.add(em);
+  }
+  if (!allowed.has(confirmEmail)) {
+    redirect(
+      `/admin/hr/employees/${employeeId}?error=${encodeURIComponent("La confirmation ne correspond à aucun e-mail reconnu pour cette fiche.")}`,
+    );
+  }
+
+  const { error: delErr } = await supabase.from("hr_employees").delete().eq("id", employeeId);
+  if (delErr) {
+    redirect(`/admin/hr/employees/${employeeId}?error=${encodeURIComponent(delErr.message)}`);
+  }
+
+  revalidatePath("/admin/hr");
+  revalidatePath("/admin/hr/employees");
+  revalidatePath(`/admin/hr/employees/${employeeId}`);
+  redirect("/admin/hr/employees?success=employee-deleted");
+}
+
 /** Legacy: create/update fiche by profile id (invited user). */
 export async function upsertHrEmployee(formData: FormData) {
   const { supabase } = await requireHrSession();

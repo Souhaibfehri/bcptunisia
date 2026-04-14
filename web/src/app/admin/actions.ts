@@ -285,7 +285,8 @@ export async function createUserDirect(formData: FormData) {
 export async function deleteUser(formData: FormData) {
   const userId = String(formData.get("user_id") ?? "").trim();
   const confirmEmail = String(formData.get("confirm_email") ?? "").trim().toLowerCase();
-  if (!userId || !confirmEmail) redirectError("/admin/users", "Confirmation requise");
+  const redirectTo = String(formData.get("redirect_to") ?? "/admin/users").trim() || "/admin/users";
+  if (!userId || !confirmEmail) redirectError(redirectTo, "Confirmation requise");
 
   const supabase = await requireFullAdmin();
 
@@ -295,15 +296,21 @@ export async function deleteUser(formData: FormData) {
     .eq("id", userId)
     .single();
   if (!target || target.email?.toLowerCase() !== confirmEmail) {
-    redirectError("/admin/users", "L'e-mail de confirmation ne correspond pas");
+    redirectError(redirectTo, "L'e-mail de confirmation ne correspond pas");
   }
 
   const admin = createServiceRoleClient();
+  /** Remove RH fiche first so we do not leave orphan hr_employees rows when profile cascades on auth delete. */
+  const { error: hrDelErr } = await admin.from("hr_employees").delete().eq("user_id", userId);
+  if (hrDelErr) redirectError(redirectTo, hrDelErr.message);
+
   const { error } = await admin.auth.admin.deleteUser(userId);
-  if (error) redirectError("/admin/users", error.message);
+  if (error) redirectError(redirectTo, error.message);
 
   revalidatePath("/admin/users");
   revalidatePath("/admin/clients");
+  revalidatePath("/admin/hr/employees");
+  /** Always return to the directory — the user detail URL would 404 after deletion. */
   redirect("/admin/users?success=user-deleted");
 }
 
