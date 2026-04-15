@@ -727,7 +727,7 @@ export async function createHrTeam(formData: FormData) {
 
 export type DeleteHrTeamResult = { ok: true } | { ok: false; error: string };
 
-/** Deletes an HR team when it has no members. HR session required. */
+/** Deletes an HR team (memberships removed via DB ON DELETE CASCADE). HR session required. */
 export async function deleteHrTeam(formData: FormData): Promise<DeleteHrTeamResult> {
   try {
     const { supabase, user } = await requireHrSession();
@@ -736,19 +736,6 @@ export async function deleteHrTeam(formData: FormData): Promise<DeleteHrTeamResu
     }
     const team_id = String(formData.get("team_id") ?? "").trim();
     if (!team_id) return { ok: false, error: "Équipe requise." };
-
-    const { count, error: cErr } = await supabase
-      .from("hr_team_members")
-      .select("employee_id", { count: "exact", head: true })
-      .eq("team_id", team_id);
-    if (cErr) return { ok: false, error: cErr.message };
-    if ((count ?? 0) > 0) {
-      return {
-        ok: false,
-        error:
-          "Impossible de supprimer : des collaborateurs sont encore rattachés à cette équipe. Retirez tous les membres puis réessayez.",
-      };
-    }
 
     const { error: dErr } = await supabase.from("hr_teams").delete().eq("id", team_id);
     if (dErr) return { ok: false, error: dErr.message };

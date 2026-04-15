@@ -25,8 +25,6 @@ export function DeleteHrTeamButton({
     if (!open) setError(null);
   }, [open]);
 
-  if (memberCount > 0) return null;
-
   const triggerClass =
     variant === "detail"
       ? "text-xs font-medium text-red-600 hover:text-red-800"
@@ -52,6 +50,14 @@ export function DeleteHrTeamButton({
             <p className="mt-2 text-sm text-bcp-muted">
               L&apos;équipe « <span className="font-medium text-bcp-anthracite">{teamName}</span> » sera supprimée
               définitivement. Cette action est irréversible.
+              {memberCount > 0 ? (
+                <span>
+                  {" "}
+                  {memberCount === 1
+                    ? "Le membre sera retiré de cette équipe."
+                    : `Les ${memberCount} membres seront retirés de cette équipe.`}
+                </span>
+              ) : null}
             </p>
 
             <form
