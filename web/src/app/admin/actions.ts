@@ -7,6 +7,7 @@ import { parseAppLocale } from "@/lib/appLocale";
 import { getLocalizedAuthCallbackUrl } from "@/lib/serverPublicSite";
 import { fetchInternalProjectMemberUserIds, notifyUsers } from "@/lib/notifications/server";
 import { assertRecaptchaFromFormData } from "@/lib/recaptcha/serverForm";
+import { consumeMutationBurst } from "@/lib/server/mutationBurst";
 
 /** Full admin: super_admin / admin only — for user, client, and global management */
 async function requireFullAdmin() {
@@ -71,6 +72,16 @@ async function requireProjectAccess(projectId: string) {
     if (!membership) throw new Error("Forbidden — not assigned to this project");
   }
   return supabase;
+}
+
+async function guardProjectMutationBurst(projectId: string, supabase: Awaited<ReturnType<typeof requireProjectAccess>>) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user?.id) redirectProjectError(projectId, "Non authentifié");
+  if (!consumeMutationBurst(`${user.id}:project:${projectId}`, 32, 12_000)) {
+    redirectProjectError(projectId, "Trop d'actions rapprochées. Patientez quelques secondes.");
+  }
 }
 
 function redirectError(path: string, message: string): never {
@@ -692,6 +703,7 @@ export async function createInvoice(formData: FormData) {
   }
   const amountCents = Math.round(amount * 100);
   const supabase = await requireProjectAccess(projectId);
+  await guardProjectMutationBurst(projectId, supabase);
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -749,6 +761,7 @@ export async function addInvoicePayment(formData: FormData) {
 
   const paymentCents = Math.round(payment * 100);
   const supabase = await requireProjectAccess(projectId);
+  await guardProjectMutationBurst(projectId, supabase);
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -900,6 +913,21 @@ export async function addStage(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
   if (!projectId || !title) redirectProjectError(projectId || "unknown", "Champs requis");
   const supabase = await requireProjectAccess(projectId);
+  await guardProjectMutationBurst(projectId, supabase);
+
+  const sinceIso = new Date(Date.now() - 3500).toISOString();
+  const { data: dupStage } = await supabase
+    .from("project_stages")
+    .select("id")
+    .eq("project_id", projectId)
+    .eq("title", title)
+    .gte("created_at", sinceIso)
+    .maybeSingle();
+  if (dupStage?.id) {
+    revalidatePath(`/admin/projects/${projectId}`);
+    redirect(`/admin/projects/${projectId}?success=stage`);
+  }
+
   const { data: rows } = await supabase
     .from("project_stages")
     .select("sort_order")
@@ -923,6 +951,21 @@ export async function addTask(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
   if (!stageId || !projectId || !title) redirectProjectError(projectId || "unknown", "Champs requis");
   const supabase = await requireProjectAccess(projectId);
+  await guardProjectMutationBurst(projectId, supabase);
+
+  const sinceIso = new Date(Date.now() - 3500).toISOString();
+  const { data: dupTask } = await supabase
+    .from("project_tasks")
+    .select("id")
+    .eq("stage_id", stageId)
+    .eq("title", title)
+    .gte("created_at", sinceIso)
+    .maybeSingle();
+  if (dupTask?.id) {
+    revalidatePath(`/admin/projects/${projectId}`);
+    redirect(`/admin/projects/${projectId}?success=task`);
+  }
+
   const { data: rows } = await supabase
     .from("project_tasks")
     .select("sort_order")
@@ -946,6 +989,21 @@ export async function addSubtask(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
   if (!taskId || !projectId || !title) redirectProjectError(projectId || "unknown", "Champs requis");
   const supabase = await requireProjectAccess(projectId);
+  await guardProjectMutationBurst(projectId, supabase);
+
+  const sinceIso = new Date(Date.now() - 3500).toISOString();
+  const { data: dupSub } = await supabase
+    .from("project_subtasks")
+    .select("id")
+    .eq("task_id", taskId)
+    .eq("title", title)
+    .gte("created_at", sinceIso)
+    .maybeSingle();
+  if (dupSub?.id) {
+    revalidatePath(`/admin/projects/${projectId}`);
+    redirect(`/admin/projects/${projectId}?success=subtask`);
+  }
+
   const { data: rows } = await supabase
     .from("project_subtasks")
     .select("sort_order")
@@ -1125,6 +1183,21 @@ export async function addMilestone(formData: FormData) {
   const targetOn = String(formData.get("target_on") ?? "").trim() || null;
   if (!projectId || !title) redirectProjectError(projectId || "unknown", "Titre requis");
   const supabase = await requireProjectAccess(projectId);
+  await guardProjectMutationBurst(projectId, supabase);
+
+  const sinceIso = new Date(Date.now() - 3500).toISOString();
+  const msBase = supabase
+    .from("project_milestones")
+    .select("id")
+    .eq("project_id", projectId)
+    .eq("title", title)
+    .gte("created_at", sinceIso);
+  const { data: dupMs } = await (targetOn ? msBase.eq("target_on", targetOn) : msBase.is("target_on", null)).maybeSingle();
+  if (dupMs?.id) {
+    revalidatePath(`/admin/projects/${projectId}`);
+    redirect(`/admin/projects/${projectId}?success=milestone`);
+  }
+
   const { data: rows } = await supabase
     .from("project_milestones")
     .select("sort_order")

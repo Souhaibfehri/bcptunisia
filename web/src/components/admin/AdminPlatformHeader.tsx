@@ -21,22 +21,31 @@ export function AdminPlatformHeader({
 }: Props) {
   return (
     <header className="border-b border-bcp-border bg-gradient-to-r from-bcp-anthracite to-bcp-navy text-white shadow-sm">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 lg:px-6">
-        <div className="flex flex-wrap items-center gap-4 sm:gap-6">
-          <Link href="/fr" className="text-xs font-semibold uppercase tracking-wider text-bcp-gold-bright">
+      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:py-4 lg:px-6">
+        <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-6">
+          <Link
+            href="/fr"
+            className="inline-flex min-h-10 items-center text-xs font-semibold uppercase tracking-wider text-bcp-gold-bright"
+          >
             BCP Tunisia
           </Link>
           <span className="hidden h-4 w-px bg-white/20 sm:block" aria-hidden />
-          <nav className="flex flex-wrap items-center gap-3 text-sm">
+          <nav className="-mx-1 flex max-w-full items-center gap-1 overflow-x-auto overflow-y-hidden px-1 pb-1 text-sm [-webkit-overflow-scrolling:touch] sm:flex-wrap sm:overflow-visible sm:pb-0">
             {variant === "projects" ? (
               <>
-                <Link href="/admin" className="font-semibold text-white hover:text-white/90">
+                <Link
+                  href="/admin"
+                  className="inline-flex shrink-0 items-center whitespace-nowrap rounded-md px-2 py-2 font-semibold text-white hover:bg-white/10 hover:text-white/90 sm:py-1.5"
+                >
                   Tableau de bord
                 </Link>
                 <span className="text-white/30" aria-hidden>
                   |
                 </span>
-                <Link href="/admin/projects" className="text-white/80 hover:text-white">
+                <Link
+                  href="/admin/projects"
+                  className="inline-flex shrink-0 items-center whitespace-nowrap rounded-md px-2 py-2 text-white/80 hover:bg-white/10 hover:text-white sm:py-1.5"
+                >
                   Projets
                 </Link>
                 {showLeads && (
@@ -44,7 +53,10 @@ export function AdminPlatformHeader({
                     <span className="text-white/30" aria-hidden>
                       |
                     </span>
-                    <Link href="/admin/leads" className="text-white/80 hover:text-white">
+                    <Link
+                      href="/admin/leads"
+                      className="inline-flex shrink-0 items-center whitespace-nowrap rounded-md px-2 py-2 text-white/80 hover:bg-white/10 hover:text-white sm:py-1.5"
+                    >
                       Leads
                     </Link>
                   </>
@@ -54,13 +66,19 @@ export function AdminPlatformHeader({
                     <span className="text-white/30" aria-hidden>
                       |
                     </span>
-                    <Link href="/admin/clients" className="text-white/80 hover:text-white">
+                    <Link
+                      href="/admin/clients"
+                      className="inline-flex shrink-0 items-center whitespace-nowrap rounded-md px-2 py-2 text-white/80 hover:bg-white/10 hover:text-white sm:py-1.5"
+                    >
                       Clients
                     </Link>
                     <span className="text-white/30" aria-hidden>
                       |
                     </span>
-                    <Link href="/admin/users" className="text-white/80 hover:text-white">
+                    <Link
+                      href="/admin/users"
+                      className="inline-flex shrink-0 items-center whitespace-nowrap rounded-md px-2 py-2 text-white/80 hover:bg-white/10 hover:text-white sm:py-1.5"
+                    >
                       Utilisateurs
                     </Link>
                   </>
@@ -72,17 +90,20 @@ export function AdminPlatformHeader({
                 <span className="text-white/30" aria-hidden>
                   |
                 </span>
-                <Link href="/admin/hr" className="font-semibold text-white hover:text-white/90">
+                <Link
+                  href="/admin/hr"
+                  className="inline-flex shrink-0 items-center whitespace-nowrap rounded-md px-2 py-2 font-semibold text-white hover:bg-white/10 hover:text-white/90 sm:py-1.5"
+                >
                   Tableau de bord RH
                 </Link>
               </>
             )}
           </nav>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <Link
             href="/admin/notifications"
-            className="relative rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium text-white hover:bg-white/15"
+            className="relative inline-flex min-h-10 items-center rounded-full border border-white/25 bg-white/10 px-3 py-2 text-xs font-medium text-white hover:bg-white/15 sm:py-1"
           >
             Notifications
             {unreadNotifications > 0 ? (
@@ -94,7 +115,7 @@ export function AdminPlatformHeader({
           {variant === "projects" && showSwitcherToHr && (
             <Link
               href="/admin/hr"
-              className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium text-white hover:bg-white/15"
+              className="inline-flex min-h-10 items-center rounded-full border border-white/25 bg-white/10 px-3 py-2 text-xs font-medium text-white hover:bg-white/15 sm:py-1"
             >
               Basculer vers RH
             </Link>
@@ -102,12 +123,15 @@ export function AdminPlatformHeader({
           {variant === "hr" && showSwitcherToProjects && (
             <Link
               href="/admin"
-              className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium text-white hover:bg-white/15"
+              className="inline-flex min-h-10 items-center rounded-full border border-white/25 bg-white/10 px-3 py-2 text-xs font-medium text-white hover:bg-white/15 sm:py-1"
             >
               Basculer vers Projets
             </Link>
           )}
-          <Link href="/portal/dashboard" className="text-xs text-white/70 hover:text-white">
+          <Link
+            href="/portal/dashboard"
+            className="inline-flex min-h-10 items-center text-xs text-white/70 hover:text-white sm:min-h-0"
+          >
             Espace client
           </Link>
           <PortalSignOut />

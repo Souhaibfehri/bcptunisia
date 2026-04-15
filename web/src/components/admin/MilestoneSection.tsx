@@ -7,6 +7,7 @@ import {
   deleteMilestone,
   toggleMilestoneAchieved,
 } from "@/app/admin/actions";
+import { PendingSubmitButton } from "@/components/admin/PendingSubmitButton";
 import { isOverdue } from "@/lib/status";
 
 type Milestone = {
@@ -27,7 +28,7 @@ export function MilestoneSection({
   const [editingId, setEditingId] = useState<string | null>(null);
 
   return (
-    <section className="rounded-2xl border border-bcp-border bg-white p-6 shadow-sm">
+    <section className="rounded-2xl border border-bcp-border bg-white p-4 shadow-sm sm:p-6">
       <h2 className="text-sm font-semibold uppercase tracking-wider text-bcp-muted">Jalons</h2>
 
       {milestones.length === 0 ? (
@@ -71,12 +72,12 @@ export function MilestoneSection({
                       defaultValue={ms.target_on ?? ""}
                       className="rounded-lg border border-bcp-border px-2 py-1 text-sm"
                     />
-                    <button
-                      type="submit"
-                      className="rounded-full bg-bcp-navy px-3 py-1 text-xs font-medium text-white"
+                    <PendingSubmitButton
+                      pendingLabel="…"
+                      className="min-h-9 rounded-full bg-bcp-navy px-3 py-1.5 text-xs font-medium text-white disabled:opacity-60"
                     >
                       Enregistrer
-                    </button>
+                    </PendingSubmitButton>
                     <button
                       type="button"
                       onClick={() => setEditingId(null)}
@@ -120,16 +121,16 @@ export function MilestoneSection({
                         <input type="hidden" name="project_id" value={projectId} />
                         <input type="hidden" name="milestone_id" value={ms.id} />
                         <input type="hidden" name="achieved" value={ms.achieved_at ? "false" : "true"} />
-                        <button
-                          type="submit"
-                          className={`rounded-full px-2.5 py-1 text-[0.65rem] font-medium ${
+                        <PendingSubmitButton
+                          pendingLabel="…"
+                          className={`min-h-9 rounded-full px-2.5 py-1.5 text-[0.65rem] font-medium disabled:opacity-60 ${
                             ms.achieved_at
                               ? "bg-bcp-surface text-bcp-muted hover:text-bcp-anthracite"
                               : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
                           }`}
                         >
                           {ms.achieved_at ? "Annuler" : "Atteint"}
-                        </button>
+                        </PendingSubmitButton>
                       </form>
                       <button
                         type="button"
@@ -141,12 +142,12 @@ export function MilestoneSection({
                       <form action={deleteMilestone}>
                         <input type="hidden" name="project_id" value={projectId} />
                         <input type="hidden" name="milestone_id" value={ms.id} />
-                        <button
-                          type="submit"
-                          className="rounded-full px-2 py-1 text-[0.65rem] text-red-500 hover:bg-red-50 hover:text-red-700"
+                        <PendingSubmitButton
+                          pendingLabel="…"
+                          className="min-h-9 rounded-full px-2 py-1.5 text-[0.65rem] text-red-500 hover:bg-red-50 hover:text-red-700 disabled:opacity-60"
                         >
                           Supprimer
-                        </button>
+                        </PendingSubmitButton>
                       </form>
                     </div>
                   </div>
@@ -167,7 +168,12 @@ export function MilestoneSection({
           <label className="text-xs text-bcp-muted">Date cible</label>
           <input name="target_on" type="date" className="mt-1 rounded-lg border border-bcp-border px-3 py-2 text-sm" />
         </div>
-        <button type="submit" className="rounded-full bg-gradient-gold px-4 py-2 text-xs font-semibold text-bcp-anthracite shadow-sm">+ Jalon</button>
+        <PendingSubmitButton
+          pendingLabel="Ajout…"
+          className="min-h-10 rounded-full bg-gradient-gold px-4 py-2 text-xs font-semibold text-bcp-anthracite shadow-sm disabled:opacity-60"
+        >
+          + Jalon
+        </PendingSubmitButton>
       </form>
     </section>
   );

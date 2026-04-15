@@ -7,6 +7,7 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getEmployeeIdForProfile, resolveEmployeeIdFromForm } from "@/lib/hr/resolve-employee";
 import { recordApprovedLeaveConsumption, recordManualBalanceMovement } from "@/lib/hr/leave-balance";
 import { notifyUsers } from "@/lib/notifications/server";
+import { consumeMutationBurst } from "@/lib/server/mutationBurst";
 
 const BUCKET = "hr-private";
 
@@ -692,18 +693,82 @@ export async function uploadHrEmployeeDocument(formData: FormData) {
 }
 
 export async function createHrTeam(formData: FormData) {
-  const { supabase } = await requireHrSession();
+  const { supabase, user } = await requireHrSession();
+  if (!consumeMutationBurst(`${user.id}:hr_create_team`, 12, 10_000)) {
+    redirect(`/admin/hr/teams?error=${encodeURIComponent("Trop d'actions rapprochées. Patientez quelques secondes.")}`);
+  }
   const name = String(formData.get("name") ?? "").trim();
   if (!name) redirect("/admin/hr/teams?error=Nom+requis");
+  if (name.length > 200) {
+    redirect(`/admin/hr/teams?error=${encodeURIComponent("Nom trop long (200 caractères max).")}`);
+  }
   const description = String(formData.get("description") ?? "").trim() || null;
+  if (description && description.length > 2000) {
+    redirect(`/admin/hr/teams?error=${encodeURIComponent("Description trop longue.")}`);
+  }
+
+  const sinceIso = new Date(Date.now() - 8000).toISOString();
+  const { data: recentSame } = await supabase
+    .from("hr_teams")
+    .select("id")
+    .eq("name", name)
+    .gte("created_at", sinceIso)
+    .maybeSingle();
+  if (recentSame?.id) {
+    revalidatePath("/admin/hr/teams");
+    redirect("/admin/hr/teams?success=team");
+  }
+
   const { error } = await supabase.from("hr_teams").insert({ name, description });
   if (error) redirect(`/admin/hr/teams?error=${encodeURIComponent(error.message)}`);
   revalidatePath("/admin/hr/teams");
   redirect("/admin/hr/teams?success=team");
 }
 
+export type DeleteHrTeamResult = { ok: true } | { ok: false; error: string };
+
+/** Deletes an HR team when it has no members. HR session required. */
+export async function deleteHrTeam(formData: FormData): Promise<DeleteHrTeamResult> {
+  try {
+    const { supabase, user } = await requireHrSession();
+    if (!consumeMutationBurst(`${user.id}:hr_delete_team`, 8, 10_000)) {
+      return { ok: false, error: "Trop de requêtes. Patientez quelques secondes." };
+    }
+    const team_id = String(formData.get("team_id") ?? "").trim();
+    if (!team_id) return { ok: false, error: "Équipe requise." };
+
+    const { count, error: cErr } = await supabase
+      .from("hr_team_members")
+      .select("employee_id", { count: "exact", head: true })
+      .eq("team_id", team_id);
+    if (cErr) return { ok: false, error: cErr.message };
+    if ((count ?? 0) > 0) {
+      return {
+        ok: false,
+        error:
+          "Impossible de supprimer : des collaborateurs sont encore rattachés à cette équipe. Retirez tous les membres puis réessayez.",
+      };
+    }
+
+    const { error: dErr } = await supabase.from("hr_teams").delete().eq("id", team_id);
+    if (dErr) return { ok: false, error: dErr.message };
+
+    revalidatePath("/admin/hr/teams");
+    revalidatePath(`/admin/hr/teams/${team_id}`);
+    return { ok: true };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Erreur";
+    if (msg === "Unauthorized") return { ok: false, error: "Non authentifié." };
+    if (msg === "Forbidden") return { ok: false, error: "Action non autorisée." };
+    return { ok: false, error: msg };
+  }
+}
+
 export async function addHrTeamMember(formData: FormData) {
-  const { supabase } = await requireHrSession();
+  const { supabase, user } = await requireHrSession();
+  if (!consumeMutationBurst(`${user.id}:hr_team_member`, 20, 10_000)) {
+    redirect(`/admin/hr/teams?error=${encodeURIComponent("Trop d'actions rapprochées. Patientez quelques secondes.")}`);
+  }
   const team_id = String(formData.get("team_id") ?? "").trim();
   const role = String(formData.get("member_role") ?? "member").trim();
   if (!team_id) redirect("/admin/hr/teams?error=Champs+requis");

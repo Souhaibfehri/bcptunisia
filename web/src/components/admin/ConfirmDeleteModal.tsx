@@ -69,8 +69,8 @@ export function ConfirmDeleteModal({
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
+          <div className="max-h-[min(90dvh,32rem)] w-full max-w-md overflow-y-auto rounded-t-2xl bg-white p-5 shadow-xl sm:rounded-2xl sm:p-6">
             <h3 className="text-lg font-semibold text-bcp-anthracite">Confirmer la suppression</h3>
             <p className="mt-2 text-sm text-bcp-muted">{confirmLabel}</p>
 

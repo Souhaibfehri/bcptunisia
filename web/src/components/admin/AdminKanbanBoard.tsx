@@ -41,6 +41,7 @@ import {
   deleteSubtask,
   updateSubtaskStatus,
 } from "@/app/admin/actions";
+import { PendingSubmitButton } from "@/components/admin/PendingSubmitButton";
 import { workItemStyle, isOverdue } from "@/lib/status";
 
 /* ────────── Types ────────── */
@@ -71,6 +72,16 @@ type StageItem = {
 type MemberRef = { user_id: string; name: string };
 
 const WORK_STATUSES = ["pending", "in_progress", "completed", "delayed", "cancelled"] as const;
+function isNextRedirect(e: unknown): boolean {
+  return (
+    typeof e === "object" &&
+    e !== null &&
+    "digest" in e &&
+    typeof (e as { digest: unknown }).digest === "string" &&
+    String((e as { digest: string }).digest).startsWith("NEXT_REDIRECT")
+  );
+}
+
 const WORK_STATUS_LABELS: Record<string, string> = {
   pending: "En attente",
   in_progress: "En cours",
@@ -115,19 +126,30 @@ function InlineAddForm({
   placeholder,
 }: {
   projectId: string;
-  action: (fd: FormData) => void;
+  action: (fd: FormData) => Promise<void>;
   hiddenFields?: Record<string, string>;
   placeholder: string;
 }) {
   const [value, setValue] = useState("");
+  const [pending, startTransition] = useTransition();
 
   return (
     <form
-      action={(fd) => {
-        action(fd);
-        setValue("");
+      onSubmit={(e) => {
+        e.preventDefault();
+        const form = e.currentTarget;
+        startTransition(async () => {
+          try {
+            const fd = new FormData(form);
+            await action(fd);
+            setValue("");
+          } catch (e) {
+            if (isNextRedirect(e)) return;
+            throw e;
+          }
+        });
       }}
-      className="flex items-center gap-1 px-2 py-1.5"
+      className={`flex items-center gap-1 px-2 py-1.5 ${pending ? "pointer-events-none opacity-60" : ""}`}
     >
       <input type="hidden" name="project_id" value={projectId} />
       {hiddenFields &&
@@ -140,13 +162,15 @@ function InlineAddForm({
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
-        className="min-w-0 flex-1 border-b border-bcp-border bg-transparent px-1 py-1 text-xs text-bcp-anthracite placeholder:text-bcp-muted/50 focus:border-bcp-gold focus:outline-none"
+        disabled={pending}
+        className="min-w-0 flex-1 border-b border-bcp-border bg-transparent px-1 py-1 text-xs text-bcp-anthracite placeholder:text-bcp-muted/50 focus:border-bcp-gold focus:outline-none disabled:opacity-70"
       />
       <button
         type="submit"
-        className="shrink-0 rounded px-2 py-0.5 text-[0.6rem] font-semibold text-bcp-gold hover:bg-bcp-surface"
+        disabled={pending || !value.trim()}
+        className="min-h-8 min-w-8 shrink-0 rounded px-2 py-1 text-[0.65rem] font-semibold text-bcp-gold hover:bg-bcp-surface disabled:opacity-40"
       >
-        +
+        {pending ? "…" : "+"}
       </button>
     </form>
   );
@@ -434,7 +458,7 @@ function SortableStage({
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex w-72 shrink-0 flex-col rounded-xl border ${borderTop} border-t-[3px] border-bcp-border bg-white shadow-sm`}
+      className={`flex w-[min(100%,18rem)] shrink-0 snap-start flex-col rounded-xl border sm:w-72 ${borderTop} border-t-[3px] border-bcp-border bg-white shadow-sm`}
     >
       {/* Header */}
       <div className="relative px-3 py-2.5">
@@ -534,7 +558,7 @@ function AddStageColumn({ projectId }: { projectId: string }) {
       <button
         type="button"
         onClick={() => setActive(true)}
-        className="flex h-24 w-72 shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-bcp-border/60 bg-bcp-surface/20 text-xs font-semibold text-bcp-muted transition hover:border-bcp-gold hover:text-bcp-gold"
+        className="flex h-24 w-[min(100%,18rem)] shrink-0 snap-start items-center justify-center rounded-xl border-2 border-dashed border-bcp-border/60 bg-bcp-surface/20 text-xs font-semibold text-bcp-muted transition hover:border-bcp-gold hover:text-bcp-gold sm:w-72"
       >
         + Nouvelle étape
       </button>
@@ -542,13 +566,31 @@ function AddStageColumn({ projectId }: { projectId: string }) {
   }
 
   return (
-    <div className="w-72 shrink-0 rounded-xl border border-bcp-border bg-white p-3 shadow-sm">
-      <form action={addStage} onSubmit={() => setActive(false)} className="space-y-2">
+    <div className="w-[min(100%,18rem)] shrink-0 snap-start rounded-xl border border-bcp-border bg-white p-3 shadow-sm sm:w-72">
+      <form
+        action={async (fd) => {
+          try {
+            await addStage(fd);
+            setActive(false);
+          } catch (e) {
+            if (isNextRedirect(e)) return;
+            throw e;
+          }
+        }}
+        className="space-y-2"
+      >
         <input type="hidden" name="project_id" value={projectId} />
         <input name="title" required autoFocus placeholder="Nom de l'étape" className="w-full rounded-lg border border-bcp-border px-3 py-2 text-sm" />
-        <div className="flex gap-2">
-          <button type="submit" className="rounded-full bg-bcp-navy px-3 py-1.5 text-xs font-semibold text-white">Ajouter</button>
-          <button type="button" onClick={() => setActive(false)} className="text-xs text-bcp-muted hover:text-bcp-anthracite">Annuler</button>
+        <div className="flex flex-wrap gap-2">
+          <PendingSubmitButton
+            pendingLabel="…"
+            className="min-h-10 rounded-full bg-bcp-navy px-3 py-2 text-xs font-semibold text-white disabled:opacity-60"
+          >
+            Ajouter
+          </PendingSubmitButton>
+          <button type="button" onClick={() => setActive(false)} className="min-h-10 text-xs text-bcp-muted hover:text-bcp-anthracite">
+            Annuler
+          </button>
         </div>
       </form>
     </div>
@@ -752,7 +794,7 @@ export function AdminKanbanBoard({
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      <div className="flex gap-4 overflow-x-auto pb-4">
+      <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-4 [-webkit-overflow-scrolling:touch]">
         <SortableContext items={stageIds} strategy={horizontalListSortingStrategy}>
           {stages.map((stage) => {
             const tasks = [...(stage.project_tasks ?? [])].sort(

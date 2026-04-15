@@ -46,6 +46,8 @@ export function AdminFlashBanner({
     "client-updated": "Client mis à jour.",
     "client-deleted": "Client supprimé.",
     crm: "Accès CRM / vente mis à jour.",
+    team: "Équipe créée.",
+    "team-deleted": "Équipe supprimée.",
   };
 
   const message = error

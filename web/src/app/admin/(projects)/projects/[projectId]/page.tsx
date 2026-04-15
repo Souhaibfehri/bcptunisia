@@ -4,6 +4,7 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { getProfile, getSessionUser, isFullAdmin, isHrStaff } from "@/lib/supabase/auth";
 import { AdminKanbanBoard } from "@/components/admin/AdminKanbanBoard";
 import { AdminFlashBanner } from "@/components/admin/AdminFlashBanner";
+import { PendingSubmitButton } from "@/components/admin/PendingSubmitButton";
 import { DeleteInvoicePaymentButton } from "@/components/admin/DeleteInvoicePaymentButton";
 import { TeamSection } from "@/components/admin/TeamSection";
 import { MilestoneSection } from "@/components/admin/MilestoneSection";
@@ -293,9 +294,9 @@ export default async function AdminProjectPipelinePage({ params, searchParams }:
                   <option value="completed">Terminé</option>
                   <option value="archived">Archivé</option>
                 </select>
-                <button type="submit" className={buttonClass({ size: "sm" })}>
+                <PendingSubmitButton pendingLabel="…" className={buttonClass({ size: "sm" })}>
                   OK
-                </button>
+                </PendingSubmitButton>
               </div>
             </form>
             {fullAdmin ? (
@@ -311,9 +312,9 @@ export default async function AdminProjectPipelinePage({ params, searchParams }:
                     placeholder={project.name}
                     className="bcp-input w-full text-sm"
                   />
-                  <button type="submit" className={buttonClass({ variant: "danger", size: "sm" })}>
+                  <PendingSubmitButton pendingLabel="…" className={buttonClass({ variant: "danger", size: "sm" })}>
                     Archiver définitivement (statut)
-                  </button>
+                  </PendingSubmitButton>
                 </form>
               </details>
             ) : null}
@@ -365,7 +366,9 @@ export default async function AdminProjectPipelinePage({ params, searchParams }:
             <label className="flex items-center gap-2 text-xs text-bcp-muted">
               <input type="checkbox" name="visible_to_client" defaultChecked className="rounded" /> Visible aux clients
             </label>
-            <button type="submit" className={buttonClass({ size: "sm" })}>Publier</button>
+            <PendingSubmitButton pendingLabel="…" className={buttonClass({ size: "sm" })}>
+              Publier
+            </PendingSubmitButton>
           </form>
           {(recentUpdates ?? []).length === 0 ? (
             <div className="mt-4 rounded-xl border border-dashed border-bcp-border bg-bcp-surface/30 px-4 py-6 text-center">
@@ -422,12 +425,12 @@ export default async function AdminProjectPipelinePage({ params, searchParams }:
                 <label className="text-xs text-bcp-muted">Notes internes</label>
                 <input name="notes" placeholder="Optionnel" className="mt-1 bcp-input" />
               </div>
-              <button
-                type="submit"
-                className="rounded-full bg-gradient-gold px-4 py-2 text-xs font-semibold text-bcp-anthracite shadow-sm transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bcp-gold focus-visible:ring-offset-2"
+              <PendingSubmitButton
+                pendingLabel="…"
+                className="min-h-10 rounded-full bg-gradient-gold px-4 py-2 text-xs font-semibold text-bcp-anthracite shadow-sm transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bcp-gold focus-visible:ring-offset-2"
               >
                 Créer la facture
-              </button>
+              </PendingSubmitButton>
             </form>
           </details>
 
@@ -467,7 +470,7 @@ export default async function AdminProjectPipelinePage({ params, searchParams }:
                     </div>
 
                     {/* Financial summary */}
-                    <div className="grid grid-cols-3 gap-px bg-bcp-border text-center text-xs">
+                    <div className="grid grid-cols-1 gap-px bg-bcp-border text-center text-xs sm:grid-cols-3">
                       <div className="bg-white px-3 py-2.5">
                         <span className="block text-bcp-muted">Total</span>
                         <span className="text-sm font-bold text-bcp-anthracite">{(inv.amount_cents / 100).toFixed(2)} {inv.currency}</span>
@@ -574,7 +577,12 @@ export default async function AdminProjectPipelinePage({ params, searchParams }:
                               <label className="text-[0.6rem] text-bcp-muted">Notes</label>
                               <input name="notes" placeholder="Optionnel" className="mt-0.5 w-24 bcp-input py-1 text-xs" />
                             </div>
-                            <button type="submit" className="rounded-full bg-emerald-600 px-3 py-1 text-[0.65rem] font-semibold text-white">Valider</button>
+                            <PendingSubmitButton
+                              pendingLabel="…"
+                              className="min-h-9 rounded-full bg-emerald-600 px-3 py-2 text-[0.65rem] font-semibold text-white sm:py-1"
+                            >
+                              Valider
+                            </PendingSubmitButton>
                           </form>
                         </details>
                       )}
@@ -592,14 +600,24 @@ export default async function AdminProjectPipelinePage({ params, searchParams }:
                           <option value="overdue">En retard</option>
                           <option value="cancelled">Annulée</option>
                         </select>
-                        <button type="submit" className={buttonClass({ size: "sm", className: "px-2.5 py-1 text-[0.65rem] font-medium" })}>Statut</button>
+                        <PendingSubmitButton
+                          pendingLabel="…"
+                          className={buttonClass({ size: "sm", className: "min-h-9 px-2.5 py-2 text-[0.65rem] font-medium sm:py-1" })}
+                        >
+                          Statut
+                        </PendingSubmitButton>
                       </form>
 
                       {/* Delete invoice */}
                       <form action={deleteInvoice}>
                         <input type="hidden" name="project_id" value={projectId} />
                         <input type="hidden" name="invoice_id" value={inv.id} />
-                        <button type="submit" className="rounded-full border border-red-200 px-2.5 py-1 text-[0.65rem] text-red-500 transition hover:bg-red-50 hover:text-red-700">Supprimer</button>
+                        <PendingSubmitButton
+                          pendingLabel="…"
+                          className="min-h-9 rounded-full border border-red-200 px-2.5 py-2 text-[0.65rem] text-red-500 transition hover:bg-red-50 hover:text-red-700 sm:py-1"
+                        >
+                          Supprimer
+                        </PendingSubmitButton>
                       </form>
                     </div>
 
@@ -646,7 +664,9 @@ export default async function AdminProjectPipelinePage({ params, searchParams }:
               </label>
             </div>
           </div>
-          <button type="submit" className={buttonClass({ size: "sm" })}>Téléverser</button>
+          <PendingSubmitButton pendingLabel="…" className={buttonClass({ size: "sm" })}>
+            Téléverser
+          </PendingSubmitButton>
         </form>
         {docsWithUrls.length === 0 ? (
           <div className="mt-4 rounded-xl border border-dashed border-bcp-border bg-bcp-surface/30 px-4 py-6 text-center">
@@ -673,7 +693,9 @@ export default async function AdminProjectPipelinePage({ params, searchParams }:
                     <input type="hidden" name="project_id" value={projectId} />
                     <input type="hidden" name="doc_id" value={d.id} />
                     <input type="hidden" name="storage_path" value={d.storage_path} />
-                    <button type="submit" className="text-xs text-red-500 hover:text-red-700">Supprimer</button>
+                    <PendingSubmitButton pendingLabel="…" className="min-h-9 text-xs text-red-500 hover:text-red-700 sm:min-h-0">
+                      Supprimer
+                    </PendingSubmitButton>
                   </form>
                 </li>
               );

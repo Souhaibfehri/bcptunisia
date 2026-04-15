@@ -1,6 +1,8 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { AdminFlashBanner } from "@/components/admin/AdminFlashBanner";
 import { addHrTeamMember, createHrTeam } from "@/app/admin/(hr)/hr/actions";
+import { PendingSubmitButton } from "@/components/admin/PendingSubmitButton";
+import { DeleteHrTeamButton } from "@/components/hr/DeleteHrTeamButton";
 import { embedOne } from "@/lib/supabase/embed";
 import { hrEmployeeDisplayName } from "@/lib/hr/display";
 import Link from "next/link";
@@ -42,9 +44,9 @@ export default async function HrTeamsPage({ searchParams }: SearchProps) {
 
       <AdminFlashBanner error={sp.error} success={sp.success} />
 
-      <section className="rounded-2xl border border-bcp-border bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-bcp-border bg-white p-4 shadow-sm sm:p-6">
         <h2 className="text-sm font-semibold uppercase tracking-wider text-bcp-muted">Nouvelle équipe</h2>
-        <form action={createHrTeam} className="mt-4 flex flex-wrap items-end gap-3">
+        <form action={createHrTeam} className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
           <div>
             <label className="text-xs text-bcp-muted">Nom</label>
             <input name="name" required className="mt-1 rounded-lg border border-bcp-border px-3 py-2 text-sm" />
@@ -53,9 +55,12 @@ export default async function HrTeamsPage({ searchParams }: SearchProps) {
             <label className="text-xs text-bcp-muted">Description</label>
             <input name="description" className="mt-1 w-full rounded-lg border border-bcp-border px-3 py-2 text-sm" />
           </div>
-          <button type="submit" className="rounded-full bg-bcp-navy px-4 py-2 text-xs font-semibold text-white">
+          <PendingSubmitButton
+            pendingLabel="Création…"
+            className="min-h-10 rounded-full bg-bcp-navy px-4 py-2 text-xs font-semibold text-white disabled:opacity-60"
+          >
             Créer
-          </button>
+          </PendingSubmitButton>
         </form>
       </section>
 
@@ -63,12 +68,15 @@ export default async function HrTeamsPage({ searchParams }: SearchProps) {
         {(teams ?? []).map((t) => {
           const members = byTeam.get(t.id) ?? [];
           return (
-            <section key={t.id} className="rounded-2xl border border-bcp-border bg-white p-6 shadow-sm">
-              <div className="flex flex-wrap items-start justify-between gap-2">
+            <section key={t.id} className="rounded-2xl border border-bcp-border bg-white p-4 shadow-sm sm:p-6">
+              <div className="flex flex-wrap items-start justify-between gap-3">
                 <h2 className="text-lg font-semibold text-bcp-anthracite">{t.name}</h2>
-                <Link href={`/admin/hr/teams/${t.id}`} className="text-xs font-semibold text-bcp-navy hover:underline">
-                  Détail équipe →
-                </Link>
+                <div className="flex flex-wrap items-center gap-2">
+                  <DeleteHrTeamButton teamId={t.id} teamName={t.name} memberCount={members.length} />
+                  <Link href={`/admin/hr/teams/${t.id}`} className="text-xs font-semibold text-bcp-navy hover:underline">
+                    Détail équipe →
+                  </Link>
+                </div>
               </div>
               {t.description && <p className="mt-1 text-sm text-bcp-muted">{t.description}</p>}
               <p className="mt-1 text-xs text-bcp-muted">{members.length} membre{members.length !== 1 ? "s" : ""}</p>
@@ -91,7 +99,7 @@ export default async function HrTeamsPage({ searchParams }: SearchProps) {
               </ul>
               {members.length === 0 && <p className="mt-2 text-sm text-bcp-muted">Aucun membre.</p>}
 
-              <form action={addHrTeamMember} className="mt-4 flex flex-wrap items-end gap-2 border-t border-bcp-border pt-4">
+              <form action={addHrTeamMember} className="mt-4 flex flex-col gap-3 border-t border-bcp-border pt-4 sm:flex-row sm:flex-wrap sm:items-end sm:gap-2">
                 <input type="hidden" name="team_id" value={t.id} />
                 <div>
                   <label className="text-xs text-bcp-muted">Ajouter</label>
@@ -116,9 +124,12 @@ export default async function HrTeamsPage({ searchParams }: SearchProps) {
                     <option value="manager">Manager</option>
                   </select>
                 </div>
-                <button type="submit" className="rounded-full border border-bcp-border px-3 py-2 text-xs font-semibold text-bcp-anthracite">
+                <PendingSubmitButton
+                  pendingLabel="Ajout…"
+                  className="min-h-10 rounded-full border border-bcp-border px-3 py-2 text-xs font-semibold text-bcp-anthracite disabled:opacity-60"
+                >
                   Ajouter
-                </button>
+                </PendingSubmitButton>
               </form>
             </section>
           );

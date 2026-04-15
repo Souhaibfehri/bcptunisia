@@ -12,7 +12,7 @@ export default async function AdminHrLayout({ children }: { children: ReactNode 
   }
 
   const pill =
-    "rounded-full px-3.5 py-1.5 text-sm font-medium text-bcp-anthracite/90 ring-1 ring-bcp-border/80 bg-white/90 shadow-sm transition hover:bg-gradient-to-r hover:from-bcp-gold/15 hover:to-amber-50/80 hover:ring-bcp-gold/40 hover:text-bcp-navy";
+    "inline-flex shrink-0 items-center justify-center min-h-10 rounded-full px-3.5 py-2 text-sm font-medium text-bcp-anthracite/90 ring-1 ring-bcp-border/80 bg-white/90 shadow-sm transition hover:bg-gradient-to-r hover:from-bcp-gold/15 hover:to-amber-50/80 hover:ring-bcp-gold/40 hover:text-bcp-navy sm:min-h-0 sm:py-1.5";
 
   return (
     <div className="space-y-6">
@@ -22,7 +22,7 @@ export default async function AdminHrLayout({ children }: { children: ReactNode 
             <h2 className="text-lg font-semibold tracking-tight text-bcp-navy">Ressources humaines</h2>
             <p className="mt-0.5 text-xs text-bcp-muted">Pilotage des équipes, congés et dossiers collaborateurs.</p>
           </div>
-          <nav className="flex flex-wrap gap-2">
+          <nav className="-mx-1 flex max-w-full gap-2 overflow-x-auto overflow-y-hidden px-1 pb-1 [-webkit-overflow-scrolling:touch] sm:flex-wrap sm:overflow-visible sm:pb-0">
             <Link href="/admin/hr" className={pill}>
               Tableau de bord
             </Link>

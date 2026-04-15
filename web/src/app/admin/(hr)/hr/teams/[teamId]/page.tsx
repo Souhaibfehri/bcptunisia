@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { DeleteHrTeamButton } from "@/components/hr/DeleteHrTeamButton";
 import { embedOne } from "@/lib/supabase/embed";
 import { hrEmployeeDisplayName } from "@/lib/hr/display";
 
@@ -37,8 +38,18 @@ export default async function HrTeamDetailPage({ params }: PageProps) {
         <Link href="/admin/hr/teams" className="text-xs font-medium text-bcp-gold">
           ← Équipes
         </Link>
-        <h1 className="mt-2 text-2xl font-semibold text-bcp-anthracite">{team.name}</h1>
-        {team.description ? <p className="mt-1 text-sm text-bcp-muted">{team.description}</p> : null}
+        <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
+          <div className="min-w-0 flex-1">
+            <h1 className="text-2xl font-semibold text-bcp-anthracite">{team.name}</h1>
+            {team.description ? <p className="mt-1 text-sm text-bcp-muted">{team.description}</p> : null}
+          </div>
+          <DeleteHrTeamButton
+            variant="detail"
+            teamId={team.id}
+            teamName={team.name}
+            memberCount={(members ?? []).length}
+          />
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
