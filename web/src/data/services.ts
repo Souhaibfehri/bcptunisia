@@ -29,6 +29,7 @@ export type ServiceSlug =
   | "industrial-utilities"
   | "compressed-air"
   | "plumbing-sanitary"
+  | "medical-gas"
   | "pools-fountains"
   | "water-tanks"
   | "electrical-installation"
@@ -39,11 +40,14 @@ export type ServiceSlug =
   | "troubleshooting-assistance"
   | "installation"
   | "equipment-sales"
-  | "preventive-corrective-maintenance";
+  | "preventive-corrective-maintenance"
+  | "signalisation";
 
 export const divisions: {
   id: DivisionId;
   slugs: ServiceSlug[];
+  /** Subset of slugs shown in the mega menu. Falls back to slugs if omitted. */
+  menuSlugs?: ServiceSlug[];
 }[] = [
   {
     id: "fire-safety",
@@ -61,6 +65,16 @@ export const divisions: {
       "fire-hydrants",
       "smoke-extraction",
       "spark-detection",
+    ],
+    // 7 items matching the pillar page "Périmètre d'intervention" section
+    menuSlugs: [
+      "fire-detection-ssi",
+      "gas-leak-detection",
+      "fire-hose-networks-ria-pia",
+      "automatic-water-extinguishing-sprinkler",
+      "fire-extinguisher-maintenance",
+      "fire-compartmentation",
+      "evacuation-intervention-plans",
     ],
   },
   {
@@ -81,6 +95,7 @@ export const divisions: {
       "industrial-utilities",
       "compressed-air",
       "plumbing-sanitary",
+      "medical-gas",
       "pools-fountains",
       "water-tanks",
     ],
@@ -102,6 +117,7 @@ export const divisions: {
       "installation",
       "equipment-sales",
       "preventive-corrective-maintenance",
+      "signalisation",
     ],
   },
 ];

@@ -6,19 +6,19 @@ export const serviceNavLabels: Record<
   Record<Locale, string>
 > = {
   "fire-detection-ssi": {
-    fr: "Détection incendie / SSI",
-    en: "Fire detection / fire alarm",
-    ar: "كشف الحريق / الإنذار",
+    fr: "Détection incendie & SSI",
+    en: "Fire detection & fire alarm",
+    ar: "كشف الحريق & الإنذار",
   },
   "gas-leak-detection": {
-    fr: "Détection de fuite de gaz",
-    en: "Gas leak detection",
-    ar: "كشف تسرب الغاز",
+    fr: "Détection de gaz",
+    en: "Gas detection",
+    ar: "كشف الغاز",
   },
   "fire-hose-networks-ria-pia": {
-    fr: "RIA / PIA",
-    en: "Fire hose networks",
-    ar: "شبكات خراطيم الحريق",
+    fr: "RIA / PIA, colonnes, hydrants",
+    en: "Hose reels / hydrants / risers",
+    ar: "خراطيم / صنابير / أعمدة",
   },
   "dry-wet-risers": {
     fr: "Colonnes sèches / humides",
@@ -26,9 +26,9 @@ export const serviceNavLabels: Record<
     ar: "أعمدة جافة / رطبة",
   },
   "automatic-water-extinguishing-sprinkler": {
-    fr: "Sprinkler / eau",
-    en: "Sprinkler / water",
-    ar: "رشاشات / ماء",
+    fr: "Extinction automatique eau / gaz",
+    en: "Automatic water / gas suppression",
+    ar: "إطفاء تلقائي بالماء / الغاز",
   },
   "automatic-gas-extinguishing": {
     fr: "Extinction à gaz",
@@ -36,9 +36,9 @@ export const serviceNavLabels: Record<
     ar: "إطفاء بالغاز",
   },
   "fire-extinguisher-maintenance": {
-    fr: "Extincteurs",
-    en: "Fire extinguishers",
-    ar: "طفايات الحريق",
+    fr: "Extincteurs & éclairage de sécurité",
+    en: "Extinguishers & emergency lighting",
+    ar: "طفايات وإضاءة طوارئ",
   },
   "emergency-lighting": {
     fr: "Éclairage de sécurité",
@@ -46,14 +46,14 @@ export const serviceNavLabels: Record<
     ar: "إضاءة الطوارئ",
   },
   "fire-compartmentation": {
-    fr: "Compartimentage",
-    en: "Compartmentation",
-    ar: "عزل حريق",
+    fr: "Compartimentage & désenfumage",
+    en: "Compartmentation & smoke control",
+    ar: "عزل وتهوية الحريق",
   },
   "evacuation-intervention-plans": {
-    fr: "Plans évacuation / intervention",
-    en: "Evacuation & intervention plans",
-    ar: "مخططات الإخلاء",
+    fr: "Plans & détection d'étincelles",
+    en: "Plans & spark detection",
+    ar: "مخططات وكشف شرر",
   },
   "fire-hydrants": {
     fr: "Poteaux & bouches incendie",
@@ -174,5 +174,15 @@ export const serviceNavLabels: Record<
     fr: "Maintenance préventive & corrective",
     en: "Preventive & corrective maintenance",
     ar: "صيانة وقائية وتصحيحية",
+  },
+  "medical-gas": {
+    fr: "Gaz médical",
+    en: "Medical gas",
+    ar: "الغاز الطبي",
+  },
+  signalisation: {
+    fr: "Signalisation",
+    en: "Safety signage",
+    ar: "اللافتات",
   },
 };

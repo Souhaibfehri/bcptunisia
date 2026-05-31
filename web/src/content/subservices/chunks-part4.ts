@@ -454,6 +454,232 @@ export const subserviceChunk4: Partial<SubserviceMap> = {
       ],
     },
   ),
+  "medical-gas": buildServicePage(
+    {
+      metaTitle: "Gaz médical | BCP Tunisia",
+      metaDescription:
+        "Réseaux de gaz médical pour établissements de santé et laboratoires : étude, installation, mise en service et maintenance.",
+      h1: "Gaz médical",
+      heroLead:
+        "Un réseau de gaz médical fiable est une exigence de sécurité, pas un équipement ordinaire.",
+      intro:
+        "BCP Tunisia intervient sur la conception et la réalisation de réseaux de distribution de gaz médicaux : oxygène, protoxyde d'azote, air médical, vide, CO₂. Nous traitons les aspects réglementaires, la sécurité et la continuité de fourniture pour les sites de santé.",
+      needs: [
+        "Assurer la continuité de fourniture sans rupture en zones critiques.",
+        "Respecter les normes applicables aux installations de gaz médicaux.",
+        "Permettre un accès maintenance clair et une traçabilité des contrôles.",
+      ],
+      provides: [
+        "Études de réseaux, plans et choix d'équipements adaptés au contexte médical.",
+        "Installation, raccordements, tests d'étanchéité et de pureté.",
+        "Mise en service, dossier technique et formation des équipes.",
+        "Maintenance et contrôles réglementaires.",
+      ],
+      sectors: [
+        "Cliniques & hôpitaux",
+        "Laboratoires & analyses",
+        "Centres de soins",
+        "Établissements spécialisés",
+      ],
+      faq: [
+        {
+          q: "Intervenez-vous sur des installations existantes ?",
+          a: "Oui : diagnostic, extension ou mise en conformité selon vos objectifs.",
+        },
+        {
+          q: "Quels gaz couvrez-vous ?",
+          a: "Oxygène, air médical, protoxyde d'azote, vide et CO₂ selon les besoins du site.",
+        },
+      ],
+    },
+    {
+      metaTitle: "Medical gas | BCP Tunisia",
+      metaDescription:
+        "Medical gas networks for healthcare facilities and laboratories: design, installation, commissioning, and maintenance.",
+      h1: "Medical gas",
+      heroLead:
+        "A reliable medical gas network is a safety requirement, not an ordinary utility.",
+      intro:
+        "BCP Tunisia designs and installs medical gas distribution networks: oxygen, nitrous oxide, medical air, vacuum, CO₂. We handle regulatory requirements, safety, and supply continuity for healthcare facilities.",
+      needs: [
+        "Guarantee continuous supply without interruption in critical areas.",
+        "Comply with standards applicable to medical gas installations.",
+        "Enable clear maintenance access and full traceability of inspections.",
+      ],
+      provides: [
+        "Network studies, plans, and equipment selection suited to medical contexts.",
+        "Installation, connections, leak and purity tests.",
+        "Commissioning, technical dossier, and team training.",
+        "Maintenance and regulatory inspections.",
+      ],
+      sectors: [
+        "Clinics & hospitals",
+        "Laboratories & diagnostics",
+        "Care centres",
+        "Specialised facilities",
+      ],
+      faq: [
+        {
+          q: "Do you work on existing installations?",
+          a: "Yes: assessment, extension, or compliance work depending on your objectives.",
+        },
+        {
+          q: "Which gases do you cover?",
+          a: "Oxygen, medical air, nitrous oxide, vacuum, and CO₂ according to site requirements.",
+        },
+      ],
+    },
+    {
+      metaTitle: "الغاز الطبي | BCP Tunisia",
+      metaDescription:
+        "شبكات الغاز الطبي للمنشآت الصحية والمختبرات: دراسة، تركيب، تشغيل وصيانة.",
+      h1: "الغاز الطبي",
+      heroLead:
+        "شبكة غاز طبي موثوقة متطلب سلامة، لا مجرد مرفق عادي.",
+      intro:
+        "تتدخل BCP Tunisia في تصميم وتنفيذ شبكات توزيع الغاز الطبي: الأكسجين، الهواء الطبي، أكسيد النيتروز، الفراغ، وثاني أكسيد الكربون. نعالج الجوانب التنظيمية والسلامة واستمرارية التوريد.",
+      needs: [
+        "ضمان استمرارية التوريد دون انقطاع في المناطق الحرجة.",
+        "الامتثال للمعايير المطبقة على منشآت الغاز الطبي.",
+        "تيسير صيانة واضحة وتتبع كامل للفحوصات.",
+      ],
+      provides: [
+        "دراسات شبكات ومخططات واختيار معدات ملائمة للسياق الطبي.",
+        "التركيب، التوصيلات، اختبارات التسرب والنقاء.",
+        "التشغيل التجريبي، الملف الفني، وتكوين الفرق.",
+        "الصيانة والفحوصات التنظيمية.",
+      ],
+      sectors: [
+        "العيادات والمستشفيات",
+        "المختبرات والتشخيص",
+        "مراكز الرعاية",
+        "المنشآت المتخصصة",
+      ],
+      faq: [
+        {
+          q: "هل تتدخلون في منشآت قائمة؟",
+          a: "نعم: تشخيص، توسيع، أو امتثال حسب أهدافكم.",
+        },
+        {
+          q: "ما الغازات التي تغطيها؟",
+          a: "الأكسجين، الهواء الطبي، أكسيد النيتروز، الفراغ، وثاني أكسيد الكربون.",
+        },
+      ],
+    },
+  ),
+  signalisation: buildServicePage(
+    {
+      metaTitle: "Signalisation de sécurité | BCP Tunisia",
+      metaDescription:
+        "Signalisation de sécurité et signalétique technique pour sites industriels et tertiaires : fourniture, pose et mise à jour.",
+      h1: "Signalisation",
+      heroLead:
+        "Une signalétique cohérente réduit l'incertitude et oriente les personnes dans les situations normales comme critiques.",
+      intro:
+        "BCP Tunisia intervient sur la signalisation de sécurité incendie, d'évacuation et de risques, ainsi que sur la signalétique technique de repérage. Nous calons les plans de pose sur les flux réels du site et les obligations réglementaires.",
+      needs: [
+        "Rendre les consignes visibles et compréhensibles pour tous les occupants.",
+        "Aligner la signalétique avec la détection, les plans d'évacuation et les procédures.",
+        "Faciliter les mises à jour après travaux ou modifications d'aménagement.",
+      ],
+      provides: [
+        "Analyse des flux, des risques et des obligations applicables.",
+        "Plan de signalisation, fourniture et pose.",
+        "Signalétique d'évacuation, incendie, risques et repérage technique.",
+        "Mise à jour et maintenance de la cohérence documentaire.",
+      ],
+      sectors: [
+        "Industrie & logistique",
+        "Tertiaire & retail",
+        "Santé",
+        "Infrastructures",
+      ],
+      faq: [
+        {
+          q: "Intervenez-vous sur des sites existants ?",
+          a: "Oui : audit de l'existant, mise à jour et compléments selon les obligations.",
+        },
+        {
+          q: "Fournissez-vous la signalétique ou seulement la pose ?",
+          a: "Les deux : fourniture et pose ou fourniture seule selon vos besoins.",
+        },
+      ],
+    },
+    {
+      metaTitle: "Safety signage | BCP Tunisia",
+      metaDescription:
+        "Safety and technical signage for industrial and tertiary sites: supply, installation, and updates.",
+      h1: "Signage",
+      heroLead:
+        "Consistent signage reduces uncertainty and guides people in both normal and critical situations.",
+      intro:
+        "BCP Tunisia covers fire safety signage, evacuation and hazard markings, and technical identification signage. We align installation plans with actual site flows and regulatory requirements.",
+      needs: [
+        "Make instructions visible and understandable for all occupants.",
+        "Align signage with detection systems, evacuation plans, and procedures.",
+        "Simplify updates after works or layout changes.",
+      ],
+      provides: [
+        "Flow analysis, risk assessment, and applicable obligation review.",
+        "Signage plan, supply, and installation.",
+        "Evacuation, fire, hazard, and technical identification signage.",
+        "Updates and documentary consistency maintenance.",
+      ],
+      sectors: [
+        "Industry & logistics",
+        "Commercial & retail",
+        "Healthcare",
+        "Infrastructure",
+      ],
+      faq: [
+        {
+          q: "Do you work on existing sites?",
+          a: "Yes: audit of current state, updates, and additions to meet obligations.",
+        },
+        {
+          q: "Do you supply signage or only install it?",
+          a: "Both: supply and installation, or supply only depending on your needs.",
+        },
+      ],
+    },
+    {
+      metaTitle: "لافتات السلامة | BCP Tunisia",
+      metaDescription:
+        "لافتات السلامة والتعريف التقني للمنشآت الصناعية والخدمية: توريد، تركيب وتحديث.",
+      h1: "اللافتات",
+      heroLead:
+        "لافتات متسقة تقلل الغموض وتوجه الأشخاص في الأوضاع العادية والحرجة.",
+      intro:
+        "تتدخل BCP Tunisia في لافتات السلامة من الحريق، الإخلاء والمخاطر، وكذلك في اللافتات التقنية للتعريف. نضبط خطط التركيب على التدفقات الفعلية للموقع والمتطلبات التنظيمية.",
+      needs: [
+        "جعل التعليمات مرئية ومفهومة لجميع شاغلي الموقع.",
+        "مواءمة اللافتات مع أنظمة الكشف ومخططات الإخلاء والإجراءات.",
+        "تيسير التحديثات بعد الأشغال أو تعديلات التهيئة.",
+      ],
+      provides: [
+        "تحليل التدفقات والمخاطر والالتزامات المطبقة.",
+        "خطة لافتات، توريد وتركيب.",
+        "لافتات إخلاء، حريق، مخاطر، وتعريف تقني.",
+        "تحديث والحفاظ على اتساق الوثائق.",
+      ],
+      sectors: [
+        "الصناعة واللوجستيك",
+        "الخدمات والتجارة",
+        "الصحة",
+        "البنى التحتية",
+      ],
+      faq: [
+        {
+          q: "هل تتدخلون في مواقع قائمة؟",
+          a: "نعم: تدقيق الوضع الراهن، تحديثات وإضافات وفق الالتزامات.",
+        },
+        {
+          q: "هل توردون اللافتات أم تركّبونها فقط؟",
+          a: "الاثنان: توريد وتركيب، أو توريد فقط حسب احتياجاتكم.",
+        },
+      ],
+    },
+  ),
   "video-surveillance": buildServicePage(
     {
       metaTitle: "Vidéosurveillance | BCP Tunisia",

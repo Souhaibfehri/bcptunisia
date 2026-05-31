@@ -23,8 +23,8 @@
       "pillars": {
         "fire-safety": { "title": "Sécurité incendie" },
         "electronic-security": { "title": "Sécurité électronique" },
-        "industrial-fluids": { "title": "Fluides industrie & tertiaire" },
-        "industrial-electrical": { "title": "Électricité industrie & tertiaire" },
+        "industrial-fluids": { "title": "Fluides industriels & tertiaires" },
+        "industrial-electrical": { "title": "Électricité industrielle & tertiaire" },
         "engineering-services": { "title": "Ingénierie & services" }
       }
     }
@@ -38,7 +38,7 @@
     "ctaTitle": "Un projet technique ?",
     "ctaBody": "Expliquez votre besoin : nos équipes vous recontactent pour cadrer la suite.",
     "ctaButton": "Écrire à BCP Tunisia",
-    "legal": "Siège et coordonnées : à compléter avant mise en ligne.",
+    "legal": "BCP Tunisia — BE CLOSE PROTECTION. Siège : Ksar Saïd II, 24 Av. Monji Slim, Tunis 2000, Tunisie.",
     "rights": "Tous droits réservés."
   },
   "stickyCta": {
@@ -244,7 +244,7 @@
     "h1": "Contact & demande de devis",
     "lead": "Décrivez votre besoin : nous revenons vers vous pour qualifier la demande et proposer la suite (visite, étude sommaire, proposition technique).",
     "asideTitle": "Coordonnées",
-    "asideBody": "Téléphone, e-mail et adresse : à compléter avant publication.",
+    "asideBody": "Retrouvez-nous à notre siège social ou contactez-nous par téléphone et e-mail.",
     "mapPlaceholder": "Carte / zone d’intervention : optionnelle."
   },
   "faqPage": {

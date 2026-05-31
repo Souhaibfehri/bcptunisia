@@ -439,10 +439,10 @@ export const pillarPages: PillarMap = {
   ),
   "industrial-fluids": p(
     {
-      metaTitle: "Fluides industrie & tertiaire | BCP Tunisia",
+      metaTitle: "Fluides industriels & tertiaires | BCP Tunisia",
       metaDescription:
         "CVC, utilités, air comprimé, plomberie, piscines et stockage d’eau : études, installation et maintenance.",
-      h1: "Fluides industrie & tertiaire",
+      h1: "Fluides industriels & tertiaires",
       heroLead:
         "Les fluides portent à la fois confort, process et sécurité sanitaire : ils méritent une conception intégrée.",
       intro:
@@ -452,6 +452,7 @@ export const pillarPages: PillarMap = {
         "Utilités industrielles",
         "Air comprimé",
         "Plomberie & sanitaire",
+        "Gaz médical",
         "Piscines & fontaines",
         "Réservoirs & stockage d’eau",
       ],
@@ -514,6 +515,7 @@ export const pillarPages: PillarMap = {
         "Industrial utilities",
         "Compressed air",
         "Plumbing & sanitary",
+        "Medical gas",
         "Pools & fountains",
         "Water tanks & storage",
       ],
@@ -576,6 +578,7 @@ export const pillarPages: PillarMap = {
         "المرافق الصناعية",
         "الهواء المضغوط",
         "السباكة والصحية",
+        "الغاز الطبي",
         "المسابح والنوافير",
         "خزانات المياه",
       ],
@@ -627,10 +630,10 @@ export const pillarPages: PillarMap = {
   ),
   "industrial-electrical": p(
     {
-      metaTitle: "Électricité industrie & tertiaire | BCP Tunisia",
+      metaTitle: "Électricité industrielle & tertiaire | BCP Tunisia",
       metaDescription:
         "Installations électriques, thermographie et montage d’armoires : qualité, sécurité et maintenabilité.",
-      h1: "Électricité industrie & tertiaire",
+      h1: "Électricité industrielle & tertiaire",
       heroLead:
         "L’électricité est structurante : la qualité de pose et de documentation conditionne la sécurité du site.",
       intro:
@@ -821,6 +824,7 @@ export const pillarPages: PillarMap = {
         "Installation",
         "Fourniture d’équipements",
         "Maintenance préventive & corrective",
+        "Signalisation",
       ],
       approach: [
         "Écoute du besoin réel et cadrage du périmètre.",
@@ -883,6 +887,7 @@ export const pillarPages: PillarMap = {
         "Installation",
         "Equipment supply",
         "Preventive & corrective maintenance",
+        "Signage",
       ],
       approach: [
         "Listen to the real need and frame scope.",
@@ -945,6 +950,7 @@ export const pillarPages: PillarMap = {
         "التركيب",
         "توريد المعدات",
         "الصيانة الوقائية والتصحيحية",
+        "اللافتات",
       ],
       approach: [
         "الاستماع للحاجة الفعلية وتحديد النطاق.",

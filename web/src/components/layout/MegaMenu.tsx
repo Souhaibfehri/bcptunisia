@@ -46,7 +46,7 @@ export function MegaMenu() {
                   {t(`pillars.${d.id}.title`)}
                 </Link>
                 <ul className="max-h-72 space-y-0.5 overflow-y-auto px-2 py-3">
-                  {d.slugs.map((slug) => (
+                  {(d.menuSlugs ?? d.slugs).map((slug) => (
                     <li key={slug}>
                       <Link
                         href={subservicePath(d.id, slug)}

@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
 import { Link } from "@/i18n/routing";
+import { HeroCarousel } from "@/components/layout/HeroCarousel";
 import type { Locale } from "@/content/types";
 import { divisions } from "@/data/services";
 import { divisionPath } from "@/data/nav";
@@ -39,24 +39,14 @@ export default async function HomePage({
   const referenceLogos = await getReferenceLogos(loc);
   const homeM = await getHomePageMerged(loc, (key) => t(key));
   const site = await getResolvedSiteSettings();
-  const heroImg =
-    homeM.heroImageUrl ??
-    "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=2000&q=80";
   const formOk = pickLocale(site.formSuccessMessage, loc, forms("success"));
   const formErr = pickLocale(site.formErrorMessage, loc, forms("error"));
 
   return (
     <>
       <section className="relative overflow-hidden bg-bcp-navy text-white">
-        <Image
-          src={heroImg}
-          alt=""
-          fill
-          className="object-cover opacity-40"
-          priority
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-bcp-navy/80 via-bcp-navy/90 to-bcp-navy" />
+        <HeroCarousel />
+        <div className="absolute inset-0 bg-gradient-to-b from-bcp-navy/75 via-bcp-navy/85 to-bcp-navy" />
         <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:py-24 lg:px-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-bcp-gold-bright">

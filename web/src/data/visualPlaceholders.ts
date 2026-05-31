@@ -17,13 +17,14 @@ export const VISUAL_KEYS = [
 export type VisualPlacementKey = (typeof VISUAL_KEYS)[number];
 
 export const DEFAULT_VISUAL_IMAGES: Record<VisualPlacementKey, string> = {
-  "services-index": u("1581092160562-40aa08e78837"),
-  industries: u("1565514020176-dbfddb4a4423"),
-  maintenance: u("1581091226825-a6a2a5aee158"),
-  "division-fire-safety": u("1590644365607-1c5a38fc42e5"),
-  "division-electronic-security": u("1580584126903-c17d41830450"),
-  "division-industrial-fluids": u("1542017742638-7e3b6b62c578"),
-  "division-industrial-electrical": u("1558618666-fcd25c85cd64"),
+  "services-index":               u("1581092160562-40aa08e78837"),
+  industries:                     u("1565514020176-dbfddb4a4423"),
+  maintenance:                    u("1581091226825-a6a2a5aee158"),
+  // Division heroes — local images from /public/images/services/
+  "division-fire-safety":         "/images/services/service-sprinkler-manifold.jpeg",
+  "division-electronic-security": "/images/services/service-cctv-cameras.jpeg",
+  "division-industrial-fluids":   "/images/services/service-air-comprime-room.jpeg",
+  "division-industrial-electrical": "/images/services/service-electrician-panel.jpeg",
   "division-engineering-services": u("1581094794329-c8112a89af12"),
 };
 

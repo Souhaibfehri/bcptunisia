@@ -18,6 +18,7 @@ import { SectionHeroBand } from "@/components/media/SectionHeroBand";
 import { divisionToVisualKey } from "@/data/visualPlaceholders";
 import { getVisualForPlacement } from "@/lib/cms/visualsResolved";
 import { divisionToFormCategory } from "@/lib/serviceCategory";
+import { serviceVisuals } from "@/data/serviceVisuals";
 
 export function generateStaticParams() {
   const out: { division: string; slug: string }[] = [];
@@ -60,10 +61,10 @@ export default async function SubservicePage({
   const page = getSubservicePage(locale as Locale, s);
   const nav = await getTranslations({ locale, namespace: "nav" });
   const common = await getTranslations({ locale, namespace: "common" });
-  const heroVisual = await getVisualForPlacement(
-    divisionToVisualKey(id),
-    locale as Locale,
-  );
+  const slugImageSrc = serviceVisuals[s];
+  const heroVisual = slugImageSrc
+    ? { src: slugImageSrc, alt: page.h1 }
+    : await getVisualForPlacement(divisionToVisualKey(id), locale as Locale);
 
   return (
     <>

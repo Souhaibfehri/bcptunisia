@@ -8,9 +8,9 @@ export const SITE_COPY_DEFAULTS = {
     ar: "من الدراسة إلى الصيانة، نؤمّن ونوفر وندعم بيئاتكم الصناعية والخدمية.",
   } satisfies LocaleStringPartial,
   footerLegal: {
-    fr: "BCP Tunisia — BE CLOSE PROTECTION. Données légales et coordonnées éditables dans l’administration de contenu.",
-    en: "BCP Tunisia — BE CLOSE PROTECTION. Legal lines and contact details are editable in the CMS.",
-    ar: "BCP Tunisia — BE CLOSE PROTECTION. البيانات القانونية والإحداثيات قابلة للتعديل في نظام إدارة المحتوى.",
+    fr: "BCP Tunisia — BE CLOSE PROTECTION. Siège : Ksar Saïd II, 24 Av. Monji Slim, Tunis 2000, Tunisie.",
+    en: "BCP Tunisia — BE CLOSE PROTECTION. Head office: Ksar Saïd II, 24 Av. Monji Slim, Tunis 2000, Tunisia.",
+    ar: "BCP Tunisia — BE CLOSE PROTECTION. المقر: قصر سعيد II، 24 ش. منجي سليم، تونس 2000، تونس.",
   } satisfies LocaleStringPartial,
   formSuccess: {
     fr: "Merci. Votre demande a été transmise.",
@@ -27,9 +27,8 @@ export const SITE_COPY_DEFAULTS = {
 export const COMPANY_DEFAULTS = {
   companyName: "BCP Tunisia",
   companyLegalLine: "BE CLOSE PROTECTION",
-  headOfficeAddress:
-    "Immeuble 9 Rue Mohamed Ali Annabi, 4ème étage, appart 1, Monplaisir, Tunis 1073",
-  workshopAddress: "16 Rue Beja, Z.I El M’Ghira, Fouchena",
+  headOfficeAddress: "Ksar Saïd II, 24 Av. Monji Slim, Tunis 2000, Tunisie",
+  workshopAddress: "",
   emailPrimary: "contact@bcptunisia.com",
   emailSecondary: "dg@bcptunisia.com",
   phoneLandline: "+216 71 902 025",
