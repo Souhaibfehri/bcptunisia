@@ -66,16 +66,8 @@ export const divisions: {
       "smoke-extraction",
       "spark-detection",
     ],
-    // 7 items matching the pillar page "Périmètre d'intervention" section
-    menuSlugs: [
-      "fire-detection-ssi",
-      "gas-leak-detection",
-      "fire-hose-networks-ria-pia",
-      "automatic-water-extinguishing-sprinkler",
-      "fire-extinguisher-maintenance",
-      "fire-compartmentation",
-      "evacuation-intervention-plans",
-    ],
+    // Show every fire-safety service in the mega menu (now that the grouped
+    // entries have been split into distinct items). The list is scrollable.
   },
   {
     id: "electronic-security",

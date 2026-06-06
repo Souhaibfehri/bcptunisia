@@ -16,9 +16,9 @@ export const serviceNavLabels: Record<
     ar: "كشف الغاز",
   },
   "fire-hose-networks-ria-pia": {
-    fr: "RIA / PIA, colonnes, hydrants",
-    en: "Hose reels / hydrants / risers",
-    ar: "خراطيم / صنابير / أعمدة",
+    fr: "RIA / PIA",
+    en: "Fire hose reels (RIA / PIA)",
+    ar: "RIA / PIA",
   },
   "dry-wet-risers": {
     fr: "Colonnes sèches / humides",
@@ -26,9 +26,9 @@ export const serviceNavLabels: Record<
     ar: "أعمدة جافة / رطبة",
   },
   "automatic-water-extinguishing-sprinkler": {
-    fr: "Extinction automatique eau / gaz",
-    en: "Automatic water / gas suppression",
-    ar: "إطفاء تلقائي بالماء / الغاز",
+    fr: "Extinction automatique à eau – Sprinkler",
+    en: "Automatic water extinguishing – Sprinkler",
+    ar: "إطفاء تلقائي بالماء – سبرينكلر",
   },
   "automatic-gas-extinguishing": {
     fr: "Extinction à gaz",
@@ -36,9 +36,9 @@ export const serviceNavLabels: Record<
     ar: "إطفاء بالغاز",
   },
   "fire-extinguisher-maintenance": {
-    fr: "Extincteurs & éclairage de sécurité",
-    en: "Extinguishers & emergency lighting",
-    ar: "طفايات وإضاءة طوارئ",
+    fr: "Extincteurs",
+    en: "Fire extinguishers",
+    ar: "طفايات الحريق",
   },
   "emergency-lighting": {
     fr: "Éclairage de sécurité",
@@ -46,14 +46,14 @@ export const serviceNavLabels: Record<
     ar: "إضاءة الطوارئ",
   },
   "fire-compartmentation": {
-    fr: "Compartimentage & désenfumage",
-    en: "Compartmentation & smoke control",
-    ar: "عزل وتهوية الحريق",
+    fr: "Compartimentage",
+    en: "Compartmentation",
+    ar: "عزل الحريق",
   },
   "evacuation-intervention-plans": {
-    fr: "Plans & détection d'étincelles",
-    en: "Plans & spark detection",
-    ar: "مخططات وكشف شرر",
+    fr: "Plan d’évacuation",
+    en: "Evacuation plans",
+    ar: "مخطط الإخلاء",
   },
   "fire-hydrants": {
     fr: "Poteaux & bouches incendie",
