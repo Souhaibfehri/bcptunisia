@@ -31,7 +31,7 @@ export const COMPANY_DEFAULTS = {
   workshopAddress: "",
   emailPrimary: "contact@bcptunisia.com",
   emailSecondary: "dg@bcptunisia.com",
-  phoneLandline: "+216 71 902 025",
+  phoneLandline: "92513233",
   phoneMobile: "+216 98 429 945",
   whatsappUrl: "",
   mapUrl: "",
