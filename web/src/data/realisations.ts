@@ -1,0 +1,105 @@
+/**
+ * Realisation photos for the "Références de prestige" showcase.
+ *
+ * Images live in `public/references/realisations/` and were optimised from the
+ * source field photos (resized to max 1600px, WebP q78). Dimensions are stored
+ * so the gallery can lay out portrait/landscape tiles without layout shift.
+ *
+ * No fabricated client/project captions — per editorial policy, project details
+ * are confirmed before publication. Re-run the optimiser to add or replace tiles.
+ */
+export type Realisation = {
+  src: string;
+  /** intrinsic width of the optimised file */
+  w: number;
+  /** intrinsic height of the optimised file */
+  h: number;
+};
+
+export const REALISATIONS: Realisation[] = [
+  { src: "/references/realisations/real-01.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-02.webp", w: 960, h: 720 },
+  { src: "/references/realisations/real-03.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-04.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-05.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-06.webp", w: 738, h: 1600 },
+  { src: "/references/realisations/real-07.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-08.webp", w: 960, h: 720 },
+  { src: "/references/realisations/real-09.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-10.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-11.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-12.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-13.webp", w: 960, h: 1280 },
+  { src: "/references/realisations/real-14.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-15.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-16.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-17.webp", w: 960, h: 720 },
+  { src: "/references/realisations/real-18.webp", w: 960, h: 720 },
+  { src: "/references/realisations/real-19.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-20.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-21.webp", w: 958, h: 1280 },
+  { src: "/references/realisations/real-22.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-23.webp", w: 1600, h: 720 },
+  { src: "/references/realisations/real-24.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-25.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-26.webp", w: 1600, h: 739 },
+  { src: "/references/realisations/real-27.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-28.webp", w: 960, h: 720 },
+  { src: "/references/realisations/real-29.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-30.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-31.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-32.webp", w: 960, h: 720 },
+  { src: "/references/realisations/real-33.webp", w: 720, h: 1560 },
+  { src: "/references/realisations/real-34.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-35.webp", w: 1600, h: 720 },
+  { src: "/references/realisations/real-36.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-37.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-38.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-39.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-40.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-41.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-42.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-43.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-44.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-45.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-46.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-47.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-48.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-49.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-50.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-51.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-52.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-53.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-54.webp", w: 960, h: 720 },
+  { src: "/references/realisations/real-55.webp", w: 1110, h: 1480 },
+  { src: "/references/realisations/real-56.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-57.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-58.webp", w: 1600, h: 739 },
+  { src: "/references/realisations/real-59.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-60.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-61.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-62.webp", w: 1280, h: 960 },
+  { src: "/references/realisations/real-63.webp", w: 1071, h: 1428 },
+  { src: "/references/realisations/real-64.webp", w: 960, h: 1280 },
+  { src: "/references/realisations/real-65.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-66.webp", w: 960, h: 1280 },
+  { src: "/references/realisations/real-67.webp", w: 1280, h: 720 },
+  { src: "/references/realisations/real-68.webp", w: 1428, h: 1071 },
+  { src: "/references/realisations/real-69.webp", w: 720, h: 1600 },
+  { src: "/references/realisations/real-70.webp", w: 1600, h: 739 },
+  { src: "/references/realisations/real-71.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-72.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-73.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-74.webp", w: 960, h: 1280 },
+  { src: "/references/realisations/real-75.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-76.webp", w: 738, h: 1600 },
+  { src: "/references/realisations/real-77.webp", w: 738, h: 1600 },
+  { src: "/references/realisations/real-78.webp", w: 960, h: 1280 },
+  { src: "/references/realisations/real-79.webp", w: 738, h: 1600 },
+  { src: "/references/realisations/real-80.webp", w: 1200, h: 1600 },
+  { src: "/references/realisations/real-81.webp", w: 1600, h: 1200 },
+  { src: "/references/realisations/real-82.webp", w: 1199, h: 1600 },
+  { src: "/references/realisations/real-83.webp", w: 1600, h: 720 },
+  { src: "/references/realisations/real-84.webp", w: 1600, h: 720 },
+  { src: "/references/realisations/real-85.webp", w: 1600, h: 738 },
+];

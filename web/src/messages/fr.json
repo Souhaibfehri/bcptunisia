@@ -147,7 +147,7 @@
       "title": "Références",
       "subtitle": "Organisations qui nous confient des environnements exigeants — détail des projets sur demande.",
       "cta": "Voir toutes les références",
-      "marqueeAria": "Défilé des logos de nos références clients"
+      "marqueeAria": "Défilé des logos de nos références de prestige"
     },
     "why": {
       "title": "Pourquoi BCP Tunisia",
@@ -192,12 +192,19 @@
     "ctaContact": "Parler à un ingénieur"
   },
   "referencesPage": {
-    "metaTitle": "Références | BCP Tunisia",
+    "metaTitle": "Références de prestige | BCP Tunisia",
     "metaDescription": "Organisations ayant fait appel à BCP Tunisia — détail des missions communiqué sur demande.",
-    "h1": "Références clients",
+    "h1": "Références de prestige",
     "lead": "La confiance se construit sur la durée. Voici des organisations pour lesquelles nous intervenons ou avons intervenu — sans détail de projet inventé.",
     "note": "Vérifier l’orthographe officielle des dénominations et les accords de communication avant publication finale.",
-    "marqueeAria": "Logos des références clients"
+    "marqueeAria": "Logos des références de prestige",
+    "galleryTitle": "Nos réalisations",
+    "galleryLead": "Un aperçu de chantiers et d’installations menés par nos équipes — sécurité incendie, sécurité électronique, fluides et électricité industrielle.",
+    "galleryItemLabel": "Réalisation BCP Tunisia",
+    "logosTitle": "Ils nous font confiance",
+    "lightboxClose": "Fermer",
+    "lightboxPrev": "Image précédente",
+    "lightboxNext": "Image suivante"
   },
   "projectsPage": {
     "metaTitle": "Réalisations | BCP Tunisia",

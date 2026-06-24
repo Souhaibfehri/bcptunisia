@@ -147,7 +147,7 @@
       "title": "References",
       "subtitle": "Organizations that trust us with demanding environments—project details available on request.",
       "cta": "View all references",
-      "marqueeAria": "Scrolling strip of client reference logos"
+      "marqueeAria": "Scrolling strip of prestige reference logos"
     },
     "why": {
       "title": "Why BCP Tunisia",
@@ -192,12 +192,19 @@
     "ctaContact": "Speak to an engineer"
   },
   "referencesPage": {
-    "metaTitle": "References | BCP Tunisia",
+    "metaTitle": "Prestige references | BCP Tunisia",
     "metaDescription": "Organizations that have engaged BCP Tunisia—mission details provided on request.",
-    "h1": "Client references",
+    "h1": "Prestige references",
     "lead": "Trust is built over time. Here are organizations we serve or have served—without invented project stories.",
     "note": "Verify official naming and communication agreements before final publication.",
-    "marqueeAria": "Client reference logos"
+    "marqueeAria": "Prestige reference logos",
+    "galleryTitle": "Our work",
+    "galleryLead": "A look at sites and installations delivered by our teams—fire safety, electronic security, fluids, and industrial electrical.",
+    "galleryItemLabel": "BCP Tunisia project photo",
+    "logosTitle": "Trusted by",
+    "lightboxClose": "Close",
+    "lightboxPrev": "Previous image",
+    "lightboxNext": "Next image"
   },
   "projectsPage": {
     "metaTitle": "Projects | BCP Tunisia",
